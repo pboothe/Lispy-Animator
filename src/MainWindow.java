@@ -165,7 +165,7 @@ public class MainWindow extends JFrame {
 	public MainWindow()
 	{
 		super("Lispy Animator");
-		
+
 		maininput = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		output =  new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		maininput.setDividerLocation(400);

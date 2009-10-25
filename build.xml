@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<project name="lispy-animator" default="build" basedir=".">
+	
+	<target name="clean">
+		<delete dir="build/" />
+	</target>
+
+	<target name="build">
+		<mkdir dir="build"/>
+		<javac srcdir="src" destdir="build" />
+	</target>
+
+
+	<target name="run">
+		<java classname="MainWindow" classpath="build/" fork="true" />
+	</target>
+</project>
