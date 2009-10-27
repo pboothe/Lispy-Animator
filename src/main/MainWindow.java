@@ -13,43 +13,37 @@ class CompilationException extends Exception {
 	}
 }
 
+
 class BottomInput extends JPanel {
 	JTextArea text;
+  private JButton run = new JButton(">");
+
 	public BottomInput()
 	{
 		super(new BorderLayout());
 		add(text = new JTextArea(), BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel();
-		JButton run = new JButton(">");
 		buttonPanel.add(run);
 		buttonPanel.add(new JButton(">>"));
 		add(buttonPanel, BorderLayout.SOUTH);
-		
-		//Action Listeners
-		run.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				runButtonPressed(e);
-			}
-		});
 	}
-	
-	private void runButtonPressed(ActionEvent e){
-		String code = text.getText();
-		try {
-			Lisp l = new Lisp(code);
-		} catch (CompilationException ce) {
-			System.out.println(ce.getMessage());
-		} 
-	}
-}
 
+  public String getText(){
+    return text.getText();
+  }
+
+  void setPlayButtonAction(ActionListener actionListener) {
+    run.addActionListener(actionListener);
+  }
+}
 public class MainWindow extends JFrame {
 
   private TreeDisplay treeDisplay = new TreeDisplay();
 
 	JSplitPane maininput, output;
 	JTextArea outputtext = new JTextArea(){{setEditable(false);}};
-	
+  private BottomInput bottomInput = new BottomInput();
+
 	public MainWindow()
 	{
 		super("Lispy Animator");
@@ -62,9 +56,26 @@ public class MainWindow extends JFrame {
 		output.add(treeDisplay);
 		output.add(new JScrollPane(outputtext));
 		maininput.add(output);
-		maininput.add(new JScrollPane(new BottomInput()));
+		maininput.add(new JScrollPane(bottomInput));
+
+    bottomInput.setPlayButtonAction(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        playButtonPressed();
+      }
+    });
+
 		pack();
 	}
+
+  private void playButtonPressed(){
+    try {
+			Lisp lisp = new Lisp(bottomInput.getText());
+      treeDisplay.setTree(lisp.getTree());
+		} catch (CompilationException ce) {
+      treeDisplay.setMessage(ce.getMessage());
+		}
+    
+  }
 
 
 	public static void main(String args[])

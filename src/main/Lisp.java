@@ -40,7 +40,6 @@ public class Lisp {
 
 		int end = start;
 		while (end < code.length()-1 && code.charAt(end) != ')') {
-			System.out.println(code + " " + start + " "+ end);
 			if (code.charAt(start) == '(') {
 				end = findClose(code, start);
 				chunks.add(code.substring(start, end));
