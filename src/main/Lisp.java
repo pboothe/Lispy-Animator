@@ -73,6 +73,8 @@ public class Lisp {
   
   Tree parse(String code) throws CompilationException
 	{
+    if (code == null || code.isEmpty())
+       return null;
 		// Base Case
 		if (code.charAt(0) != '(') return new Tree(code);
 

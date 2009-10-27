@@ -3,7 +3,6 @@ package main;
 import graphics.TreeDisplay;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 class CompilationException extends Exception {
@@ -70,11 +69,12 @@ public class MainWindow extends JFrame {
   private void playButtonPressed(){
     try {
 			Lisp lisp = new Lisp(bottomInput.getText());
-      treeDisplay.setTree(lisp.getTree());
+      if (lisp != null)
+        treeDisplay.setTree(lisp.getTree());
 		} catch (CompilationException ce) {
       treeDisplay.setMessage(ce.getMessage());
 		}
-    
+    treeDisplay.repaint();
   }
 
 
@@ -84,5 +84,6 @@ public class MainWindow extends JFrame {
 		m.setSize(800, 600);
 		m.setVisible(true);
 		m.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    m.setLocationRelativeTo(null); //Center the window
 	}
 }

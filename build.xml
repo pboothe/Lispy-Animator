@@ -13,6 +13,6 @@
 
 
 	<target name="run">
-		<java classname="MainWindow" classpath="build/" fork="true" />
+		<java classname="main.MainWindow" classpath="build/" fork="true" />
 	</target>
 </project>
