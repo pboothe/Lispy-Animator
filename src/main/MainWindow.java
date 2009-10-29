@@ -38,7 +38,6 @@ class BottomInput extends JPanel {
 public class MainWindow extends JFrame {
 
   private TreeDisplay treeDisplay = new TreeDisplay();
-
 	JSplitPane maininput, output;
 	JTextArea outputtext = new JTextArea(){{setEditable(false);}};
   private BottomInput bottomInput = new BottomInput();
@@ -67,14 +66,31 @@ public class MainWindow extends JFrame {
 	}
 
   private void playButtonPressed(){
-    try {
-			Lisp lisp = new Lisp(bottomInput.getText());
-      if (lisp != null)
-        treeDisplay.setTree(lisp.getTree());
-		} catch (CompilationException ce) {
-      treeDisplay.setMessage(ce.getMessage());
-		}
-    treeDisplay.repaint();
+    
+    final String code = bottomInput.getText();
+    if (code == null || code.isEmpty() )
+      return;
+
+    new Thread(){
+        private CompilationException ce = null;
+        private Lisp lisp = null;
+        
+        @Override
+        public void run(){
+          try{
+            lisp =  new Lisp(code);
+            outputtext.setText(lisp.root.toString());
+          }catch(CompilationException ce){
+            this.ce = ce;
+          }
+          if (ce != null){
+            treeDisplay.setMessage(ce.getMessage());
+          }else{
+            treeDisplay.setTree(lisp.getTree());
+          }
+          treeDisplay.repaint();
+        }
+      }.start();
   }
 
 

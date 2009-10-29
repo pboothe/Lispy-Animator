@@ -8,7 +8,7 @@
 
 	<target name="build">
 		<mkdir dir="build"/>
-		<javac srcdir="src" destdir="build" />
+		<javac debug="true" debuglevel="lines,source" srcdir="src" destdir="build" />
 	</target>
 
 

@@ -75,6 +75,7 @@ public class Lisp {
 	{
     if (code == null || code.isEmpty())
        return null;
+    
 		// Base Case
 		if (code.charAt(0) != '(') return new Tree(code);
 
@@ -82,7 +83,8 @@ public class Lisp {
 		ArrayList<String> chunks = findChunks(code);
 		Tree tree = new Tree();
 		for (String chunk : chunks) {
-			tree.kids.add(parse(chunk));
+      Tree t = parse(chunk);
+			tree.addChild(t);
 		}
 		return tree;
 	}

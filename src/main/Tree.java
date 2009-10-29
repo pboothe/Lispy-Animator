@@ -3,26 +3,49 @@ package main;
 import java.util.Vector;
 
 public class Tree {
-	String data;
+	private String data = null;
+  private Vector<Tree> kids = new Vector<Tree>();
+
 	public Tree(String data)
 	{
 		this.data = data;
 	}
 
-	public Tree() {}
+	public Tree(){
+  
+  }
 
-	Vector<Tree> kids = new Vector<Tree>();
+	
 
   @Override
 	public String toString()
 	{
-		if (data != null)
-			return data;
+		if (getData() != null)
+			return getData();
 
 		String rv = "";
-		for (Tree kid : kids) {
-			rv += " " + kid;
+		for (Tree kid : getKids()) {
+      rv += " " + kid;
 		}
 		return "(" + rv.trim() + ")";
 	}
+
+  /**
+   * @return the data
+   */
+  public String getData() {
+    return data;
+  }
+
+  /**
+   * @return the kids
+   */
+  public Vector<Tree> getKids() {
+    return kids;
+  }
+
+  public void addChild(Tree child){
+    kids.add(child);
+  }
+
 }
