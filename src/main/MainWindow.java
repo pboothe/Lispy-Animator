@@ -3,6 +3,13 @@ package main;
 import graphics.TreeDisplay;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 class CompilationException extends Exception {
@@ -110,5 +117,24 @@ public class MainWindow extends JFrame {
     m.setVisible(true);
     m.setDefaultCloseOperation(EXIT_ON_CLOSE);
     m.setLocationRelativeTo(null); //Center the window
+
+    for (int i = 0; i <args.length; i++) {
+       if (!args[i].startsWith("-")){
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(new File(args[i])));
+                String in;
+                while( (in = reader.readLine()) != null){
+                    m.bottomInput.text.append(in);
+                    //I like to imagine that a  buffer is used in the textarea
+                    //So I'm avoiding concatination.
+                    m.bottomInput.text.append("\n");
+                }
+            } catch (FileNotFoundException ex) {
+                System.err.println("File: '" + args[i] +"'  not found.");
+            } catch (IOException ioe){
+                System.err.println("Error reading: " + args[i]);
+            }
+       }
+    }
   }
 }

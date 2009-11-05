@@ -19,15 +19,11 @@ public class Node {
     private static final Font FONT = new Font("Arial", Font.BOLD, FONTSIZE);
 
     public static void drawLine(Node start, Node end, Graphics2D g){
-        double theta = Math.atan2(start.y - end.y, start.x - end.x);
-
         double start_dy = (start.getBounds(g).getHeight()/2) + PADDING;
         double startx = start.x; //+ start_dy*Math.tan(theta);
         double starty = start.y + start_dy;
 
         double end_dy = (end.getBounds(g).getHeight()/2) + PADDING;
-        double theta2 = (Math.PI/2) - theta;
-        double endx = end.x;// - (end_dy / Math.tan(theta2));
         double endy = end.y - end_dy;
 
         g.drawLine( (int)startx, (int)starty, (int)end.x, (int)endy );
