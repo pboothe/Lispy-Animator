@@ -41,7 +41,7 @@ public class Tree {
         if (getData() != null)
             return getData();
         else
-            return "APPLY";
+            return "β";
     }
 
     /**
