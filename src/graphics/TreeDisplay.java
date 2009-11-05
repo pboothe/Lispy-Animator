@@ -2,13 +2,10 @@ package graphics;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import main.Tree;
 
@@ -16,9 +13,6 @@ public class TreeDisplay extends Canvas{
 
     private static final Color BACKGROUND = Color.decode("0xAAffff");
     private static final int PADDING = 20;
-    private static final int ROUNDING = 20;
-    private static final int DISTANCE = 50;
-    private static final double DEG2RAD = (2 * Math.PI)/ 360;
 
     private Map<Tree, Node> positions;
     private Vector<Vector<Node>> layers;
@@ -84,10 +78,11 @@ public class TreeDisplay extends Canvas{
     }
 
     @Override
-    public void paint(Graphics g1)
+    public void paint(Graphics g)
     {
         synchronized (this) {
-            Graphics2D g = graphicsPrep(g1);
+            BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = graphicsPrep(img);
             if (message != null){
                 g.drawString(message, getWidth()/2, getHeight()/2);
                 return;
@@ -98,17 +93,23 @@ public class TreeDisplay extends Canvas{
                 layout(tree, getWidth()/2, PADDING);
             }
 
+            
+
             for (Node n : positions.values()) {
-                n.draw(g);
+                n.draw(g2);
             }
 
 
             for (Node n : positions.values()) {
                 for (Tree kid : n.data.getKids()) {
                     Node knode = positions.get(kid);
-                    g.drawLine((int)n.x, (int)n.y, (int)knode.x, (int)knode.y);
+                    Node.drawLine(n, knode, g2);
                 }
             }
+
+            
+            g2.dispose();
+            g.drawImage(img, 0, 0, null);
         }
     }
 
@@ -150,7 +151,6 @@ public class TreeDisplay extends Canvas{
 
                     double d = Math.sqrt(dx * dx + dy * dy);
                     double F = .01 * d;
-                    System.out.println("F=" + F);
                     kid.fx += F * dx / d;
                 }
             }
@@ -160,7 +160,6 @@ public class TreeDisplay extends Canvas{
                 n.x += .01*n.vx;
                 total += Math.abs(100*n.fx);
 
-                System.out.println("" + n.data + " " + n.x);
                 if (n.x < 0) { n.x = 0; }
             }
 
@@ -168,12 +167,12 @@ public class TreeDisplay extends Canvas{
         }
     }
 
-    private Graphics2D graphicsPrep(Graphics g)
+    private Graphics2D graphicsPrep(BufferedImage img)
     {
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(BACKGROUND);
-        g2.fillRect(0, 0, getWidth(), getHeight());
-        return g2;
+        Graphics2D g = img.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(BACKGROUND);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        return g;
     }
 }

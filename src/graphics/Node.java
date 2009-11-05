@@ -5,45 +5,76 @@ import java.awt.geom.*;
 import main.*;
 
 public class Node {
+    private static final int PADDING = 5;
+    private static final int ROUNDING = 20;
+
+    private static final Color BACKGROUND = Color.WHITE;
+    private static final Color TEXT = Color.BLACK;
+    private static final Color BORDER = Color.BLACK;
+    private static final Stroke STROKE = new BasicStroke(2);
+    
+    //Taken from: http://www.3rd-evolution.de/tkrammer/docs/java_font_size.html
+    //To ensure that we got the same font size regardless of OS/DPI/Resolution
+    private static final int FONTSIZE = (int)Math.round(12.0 * Toolkit.getDefaultToolkit().getScreenResolution() / 72.0);
+    private static final Font FONT = new Font("Arial", Font.BOLD, FONTSIZE);
+
+    public static void drawLine(Node start, Node end, Graphics2D g){
+        double theta = Math.atan2(start.y - end.y, start.x - end.x);
+
+        double start_dy = (start.getBounds(g).getHeight()/2) + PADDING;
+        double startx = start.x; //+ start_dy*Math.tan(theta);
+        double starty = start.y + start_dy;
+
+        double end_dy = (end.getBounds(g).getHeight()/2) + PADDING;
+        double theta2 = (Math.PI/2) - theta;
+        double endx = end.x;// - (end_dy / Math.tan(theta2));
+        double endy = end.y - end_dy;
+
+        g.drawLine( (int)startx, (int)starty, (int)end.x, (int)endy );
+    }
+
     double x, y;
     double fx;
     double vx=0;
     Tree data;
-    String text;
 
     public Node(Tree data, double x, double y)
     {
         this.data = data;
         this.x = x;
         this.y = y;
-
-        text = data.getNodeName();
     }
-
-    private static final int PADDING = 5;
-    private static final int ROUNDING = 20;
 
     void draw(Graphics2D g)
     {
-        g.setColor(Color.BLACK);
+        g.setFont(FONT);
 
-        //Taken from: http://www.3rd-evolution.de/tkrammer/docs/java_font_size.html
-        //To ensure that we got the same font size regardless of OS/DPI/Resolution
-        int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-        int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
-        Font font = new Font("Arial", Font.PLAIN, fontSize);
-        g.setFont(font);
+        Rectangle2D bounds = getBounds(g);
 
-        //Lets get some font metric info
-        FontMetrics metrics = g.getFontMetrics();
-        Rectangle2D bounds = metrics.getStringBounds(text, g);
-        //Use the bounds to center the text
-        double tempx = x - (int)bounds.getWidth()/2;
-        double tempy = y - (int)bounds.getHeight()/2;
-        g.drawString(text,(int)tempx,(int)tempy);
-        g.drawRoundRect((int)tempx-PADDING, (int)tempy+((int)bounds.getY())-PADDING, 
-                (int)bounds.getWidth() + 2*PADDING, 
-                (int)bounds.getHeight() + 2*PADDING, 
-                ROUNDING, ROUNDING); 
+        g.setStroke(STROKE);
+        g.setColor(BACKGROUND);
+        g.fillRoundRect((int)(x - (bounds.getWidth()/2)  - PADDING ),
+                   (int)(y - (bounds.getHeight()/2) - PADDING ),
+                   (int)bounds.getWidth()  + 2*PADDING,
+                   (int)bounds.getHeight() + 2*PADDING,
+                   ROUNDING, ROUNDING);
+
+        g.setColor(BORDER);
+        g.drawRoundRect((int)(x - (bounds.getWidth()/2)  - PADDING ),
+                   (int)(y - (bounds.getHeight()/2) - PADDING ),
+                   (int)bounds.getWidth()  + 2*PADDING,
+                   (int)bounds.getHeight() + 2*PADDING,
+                   ROUNDING, ROUNDING);
+
+        g.setColor(TEXT);
+        g.drawString(data.getNodeName(), (int)(x - bounds.getWidth()/2),
+                                         (int)(y + bounds.getHeight()/2) );
+
+        
+    }
+
+    public Rectangle2D getBounds(Graphics g){
+        FontMetrics metrics = g.getFontMetrics(FONT);
+        return metrics.getStringBounds(data.getNodeName(), g);
     }
 }
