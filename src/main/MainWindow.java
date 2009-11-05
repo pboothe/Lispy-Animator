@@ -8,9 +8,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Stack;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 class CompilationException extends Exception {
   public CompilationException(String code)
@@ -28,10 +29,34 @@ class BottomInput extends JPanel {
   {
     super(new BorderLayout());
     add(text = new JTextArea(), BorderLayout.CENTER);
+    text.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {checkSyntax();}
+            public void removeUpdate(DocumentEvent e) {checkSyntax();}
+            public void changedUpdate(DocumentEvent e) {}
+        });
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(run);
     buttonPanel.add(new JButton(">>"));
     add(buttonPanel, BorderLayout.SOUTH);
+  }
+
+  private void checkSyntax(){
+      Stack<Character> stack = new Stack<Character>();
+      String code = text.getText();
+      for (int i = 0;  i < code.length(); i++){
+        try{
+            if (code.charAt(i) == '('){
+                stack.push('(');
+            }else if (code.charAt(i) == ')'){
+                if ( stack.pop() != '(' )
+                 throw new Exception("Unbalanced!!");
+            }
+        }catch(Exception e){
+            text.setBackground(Color.decode("#FF6347"));
+            return;
+        }
+      }
+      text.setBackground(stack.isEmpty() ? Color.WHITE : Color.decode("#FA8072") );
   }
 
   public String getText(){
