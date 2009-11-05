@@ -20,7 +20,7 @@ public class Node {
 
     public static void drawLine(Node start, Node end, Graphics2D g){
         double start_dy = (start.getBounds(g).getHeight()/2) + PADDING;
-        double startx = start.x; //+ start_dy*Math.tan(theta);
+        double startx = start.x + (start_dy/(start.y - end.y)); //+ start_dy*Math.tan(theta);
         double starty = start.y + start_dy;
 
         double end_dy = (end.getBounds(g).getHeight()/2) + PADDING;
