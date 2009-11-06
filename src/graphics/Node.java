@@ -19,24 +19,13 @@ public class Node {
     private static final Font FONT = new Font("Arial", Font.BOLD, FONTSIZE);
 
     public static void drawLine(Node start, Node end, Graphics2D g){
-<<<<<<< HEAD:src/graphics/Node.java
-        double start_dy = (start.getBounds(g).getHeight()/2) + PADDING;
-<<<<<<< HEAD:src/graphics/Node.java
-        double startx = start.x + (start_dy/(start.y - end.y)); //+ start_dy*Math.tan(theta);
-=======
-
         double startx = start.x;
+        double start_dy = (start.getBounds(g).getHeight()/2);
         if (start.getBounds(g).getWidth() >  10 ){//Found expeirementally
             startx += (end.x - start.x) * (start_dy/(end.y-start.y));
         }
->>>>>>> 5629249fc66fd0dd8fd54a157780a716910ebfee:src/graphics/Node.java
-=======
         g.setStroke(STROKE);
         g.setColor(BORDER);
-        double start_dy = (start.getBounds(g).getHeight()/2);
-
-        double startx = start.x;
->>>>>>> d58da08dcd3a507c1d4e753f635d48d9d87a2e65:src/graphics/Node.java
         double starty = start.y + start_dy;
 
         double end_dy = (end.getBounds(g).getHeight()/2);
