@@ -32,6 +32,7 @@ public class TreeDisplay extends Canvas{
         this.tree = tree;
         treechanged = true;
         message = null;
+        laidout = false;
     }
 
     public void setMessage(String message) 

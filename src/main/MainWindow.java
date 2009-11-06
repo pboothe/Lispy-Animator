@@ -40,7 +40,7 @@ class BottomInput extends JPanel {
     add(buttonPanel, BorderLayout.SOUTH);
   }
 
-  private void checkSyntax(){
+  private boolean checkSyntax(){
       Stack<Character> stack = new Stack<Character>();
       String code = text.getText();
       for (int i = 0;  i < code.length(); i++){
@@ -53,10 +53,16 @@ class BottomInput extends JPanel {
             }
         }catch(Exception e){
             text.setBackground(Color.decode("#FF6347"));
-            return;
+            return false;
         }
       }
       text.setBackground(stack.isEmpty() ? Color.WHITE : Color.decode("#FA8072") );
+      if (stack.isEmpty()) { 
+          run.doClick();
+          return true;
+      } else {
+          return false;
+      }
   }
 
   public String getText(){
