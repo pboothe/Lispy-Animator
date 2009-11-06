@@ -19,19 +19,15 @@ public class Node {
     private static final Font FONT = new Font("Arial", Font.BOLD, FONTSIZE);
 
     public static void drawLine(Node start, Node end, Graphics2D g){
-        double start_dy = (start.getBounds(g).getHeight()/2) + PADDING;
+        g.setStroke(STROKE);
+        g.setColor(BORDER);
+        double start_dy = (start.getBounds(g).getHeight()/2);
 
         double startx = start.x;
-        if (start.getBounds(g).getWidth() >  10 ){//Found expeirementally
-            startx += (end.x - start.x) * (start_dy/(end.y-start.y));
-        }
         double starty = start.y + start_dy;
 
-        double end_dy = (end.getBounds(g).getHeight()/2) + PADDING;
+        double end_dy = (end.getBounds(g).getHeight()/2);
         double endx = end.x;
-        if (end.getBounds(g).getWidth() > 10){
-            endx += (start.x - end.x)*(end_dy/(end.y - start.y)); //We want dy to be positive
-        }
         double endy = end.y - end_dy;
 
         g.drawLine( (int)startx, (int)starty, (int)endx, (int)endy );
