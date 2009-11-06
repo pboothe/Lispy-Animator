@@ -94,13 +94,6 @@ public class TreeDisplay extends Canvas{
                 layout(tree, getWidth()/2, PADDING);
             }
 
-            
-
-            for (Node n : positions.values()) {
-                n.draw(g2);
-            }
-
-
             for (Node n : positions.values()) {
                 for (Tree kid : n.data.getKids()) {
                     Node knode = positions.get(kid);
@@ -108,7 +101,11 @@ public class TreeDisplay extends Canvas{
                 }
             }
 
-            
+            for (Node n : positions.values()) {
+                n.draw(g2);
+            }
+
+
             g2.dispose();
             g.drawImage(img, 0, 0, null);
         }
