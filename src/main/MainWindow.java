@@ -1,17 +1,16 @@
 package main;
 
 import graphics.TreeDisplay;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import jscheme.*;
 
 class CompilationException extends Exception {
   public CompilationException(String code)
@@ -30,9 +29,9 @@ class BottomInput extends JPanel {
     super(new BorderLayout());
     add(text = new JTextArea(), BorderLayout.CENTER);
     text.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {checkSyntax();}
-            public void removeUpdate(DocumentEvent e) {checkSyntax();}
-            public void changedUpdate(DocumentEvent e) {}
+            public void insertUpdate(DocumentEvent e) { checkSyntax(); }
+            public void removeUpdate(DocumentEvent e) { checkSyntax(); }
+            public void changedUpdate(DocumentEvent e) { checkSyntax(); }
         });
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(run);
@@ -58,7 +57,6 @@ class BottomInput extends JPanel {
       }
       text.setBackground(stack.isEmpty() ? Color.WHITE : Color.decode("#FA8072") );
       if (stack.isEmpty()) { 
-          run.doClick();
           return true;
       } else {
           return false;
@@ -71,6 +69,14 @@ class BottomInput extends JPanel {
 
   void setPlayButtonAction(ActionListener actionListener) {
     run.addActionListener(actionListener);
+  }
+
+  void setChangeAction(final ActionListener actionListener) {
+      text.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { if (checkSyntax()) actionListener.actionPerformed(null); }
+            public void removeUpdate(DocumentEvent e) { if (checkSyntax()) actionListener.actionPerformed(null); }
+            public void changedUpdate(DocumentEvent e) { if (checkSyntax()) actionListener.actionPerformed(null); }
+          });
   }
 }
 public class MainWindow extends JFrame {
@@ -96,14 +102,20 @@ public class MainWindow extends JFrame {
 
     bottomInput.setPlayButtonAction(new ActionListener(){
       public void actionPerformed(ActionEvent e){
-        playButtonPressed();
+        performLayout();
+      }
+    });
+
+    bottomInput.setChangeAction(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        performLayout();
       }
     });
 
     pack();
   }
 
-  private void playButtonPressed(){
+  private void performLayout(){
     
     final String code = bottomInput.getText();
     if (code == null || code.isEmpty() )
@@ -111,20 +123,18 @@ public class MainWindow extends JFrame {
 
     new Thread(){
         private CompilationException ce = null;
-        private Lisp lisp = null;
+        private Object lisp = null;
         
         @Override
         public void run(){
-          try{
-            lisp =  new Lisp(code);
-            outputtext.setText(lisp.root.toString());
-          }catch(CompilationException ce){
-            this.ce = ce;
-          }
-          if (ce != null){
+          lisp =  new InputPort(new StringReader(code)).read();
+          outputtext.setText(lisp.toString());
+          if (lisp == InputPort.EOF) {
             treeDisplay.setMessage(ce.getMessage());
+            System.out.println(ce.getMessage());
           }else{
-            treeDisplay.setTree(lisp.getTree());
+            treeDisplay.setTree(new Tree(lisp));
+            System.out.println(lisp.toString());
           }
 
           treeDisplay.repaint();

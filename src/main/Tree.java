@@ -1,6 +1,7 @@
 package main;
 
 import java.util.*;
+import jscheme.*;
 
 public class Tree {
     private String data = null;
@@ -16,6 +17,22 @@ public class Tree {
     }
     public Tree(String data) { this(data, null); }
     public Tree(Iterable<Tree> kids) { this(null, kids); }
+    public Tree(Object o) {
+        if (o != null)
+            System.out.println(o.getClass().getName() + " " + o);
+        else
+            System.out.println("null");
+
+        if (o instanceof Pair) {
+            Pair p = (Pair)o;
+            this.kids.add(new Tree(p.first));
+            this.kids.add(new Tree(p.rest));
+        } else if (o != null) {
+            this.data = o.toString();
+        } else {
+            this.data = "";
+        }
+    }
 
     public Tree(){ }
 
@@ -63,5 +80,20 @@ public class Tree {
     public void addChild(Tree child)
     {
         kids.add(child);
+    }
+
+    public int depth()
+    {
+        int depth = 1;
+        if (kids != null) {
+            for (Tree kid : kids) {
+                int kd = kid.depth();
+                if (1 + kd > depth) {
+                    depth = 1 + kd;
+                }
+            }
+        }
+
+        return depth;
     }
 }

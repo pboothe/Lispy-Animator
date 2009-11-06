@@ -1,15 +1,13 @@
 package graphics;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
+import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import javax.swing.*;
 import main.Tree;
 
-public class TreeDisplay extends Canvas{
+public class TreeDisplay extends JComponent {
 
     private static final Color BACKGROUND = Color.decode("0xAAffff");
     private static final int PADDING = 20;
@@ -82,8 +80,7 @@ public class TreeDisplay extends Canvas{
     public void paint(Graphics g)
     {
         synchronized (this) {
-            BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = graphicsPrep(img);
+            Graphics2D g2 = graphicsPrep(g);
             if (message != null){
                 g.drawString(message, getWidth()/2, getHeight()/2);
                 return;
@@ -107,7 +104,6 @@ public class TreeDisplay extends Canvas{
 
 
             g2.dispose();
-            g.drawImage(img, 0, 0, null);
         }
     }
 
@@ -165,12 +161,16 @@ public class TreeDisplay extends Canvas{
         }
     }
 
-    private Graphics2D graphicsPrep(BufferedImage img)
+    private Graphics2D graphicsPrep(Graphics g1)
     {
-        Graphics2D g = img.createGraphics();
+        Graphics2D g = (Graphics2D)g1;
+        int depth = tree != null ? tree.depth() : 1;
+
+        double totalpixels = depth * 50 + 40;
+        double available = getHeight();
+        g.scale(available / totalpixels, available / totalpixels);
+
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(BACKGROUND);
-        g.fillRect(0, 0, getWidth(), getHeight());
         return g;
     }
 }
