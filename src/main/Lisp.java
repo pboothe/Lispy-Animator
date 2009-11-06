@@ -1,13 +1,15 @@
 package main;
 
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class Lisp {
+  String reservedwords[] = { "+", "-", "*", "/", "<", ">", "if", "fun" };
+
   Tree root = new Tree();
   public Lisp(String code) throws CompilationException
   {
-    root = parse(code);
+    root = parse(code.trim());
   }
 
   public Tree getTree(){
@@ -70,6 +72,16 @@ public class Lisp {
 
     return chunks;
   }
+
+  boolean isReserved(String word)
+  {
+      for (String reserved : reservedwords) {
+          if (reserved.equals(word)) 
+              return true;
+      }
+
+      return false;
+  }
   
   Tree parse(String code) throws CompilationException
   {
@@ -81,12 +93,39 @@ public class Lisp {
 
     // Recursive Case
     ArrayList<String> chunks = findChunks(code);
-    Tree tree = new Tree();
+    List<Tree> kids = new LinkedList<Tree>();
     for (String chunk : chunks) {
-      Tree t = parse(chunk);
-      tree.addChild(t);
+      kids.add(parse(chunk));
     }
-    return tree;
+
+    if (!kids.isEmpty() && isReserved(kids.get(0).getData())) {
+        // Now we need to make special Trees based on what kind of special thing 
+        // this is
+        Tree first = kids.get(0);
+        if (first.getKids() != null && first.getKids().size() > 0)
+            return new Tree(kids);
+
+        kids.remove(0);
+        String word = first.getData();
+        if (word.equals("fun")) {
+            // (fun name arg1 arg2 [...] body) ; note that args are optional
+            if (kids.size() <= 1) 
+                throw new CompilationException(code);
+            if (kids.get(1).getKids() == null)
+                throw new CompilationException(code);
+
+            return new Tree("fun", kids);
+        } else if (word.equals("if")) {
+            // (if cond then else)
+            if (kids.size() != 3) 
+                throw new CompilationException(code);
+            return new Tree("if", kids);
+        } else {
+            return new Tree(word, kids);
+        }
+    } else {
+        return new Tree(kids);
+    }
   }
 
 
