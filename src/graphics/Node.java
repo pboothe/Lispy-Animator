@@ -2,6 +2,7 @@ package graphics;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.Vector;
 import main.*;
 
 public class Node {
@@ -39,6 +40,7 @@ public class Node {
     double fx;
     double vx=0;
     Tree data;
+    
 
     public Node(Tree data, double x, double y)
     {
@@ -79,4 +81,8 @@ public class Node {
         FontMetrics metrics = g.getFontMetrics(FONT);
         return metrics.getStringBounds(data.getNodeName(), g);
     }
+
+    
+
+
 }

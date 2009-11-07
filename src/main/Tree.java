@@ -5,33 +5,23 @@ import jscheme.*;
 
 public class Tree {
     private String data = null;
-    private Vector<Tree> kids = new Vector<Tree>();
+    private Vector<Tree> children = new Vector<Tree>();
+    
+    Vector<NodeChangeListener> listeners = new Vector<NodeChangeListener>();
 
     public Tree(String data, Iterable<Tree> kids) 
     {
-        this.data = data; 
+        setData(data, false);
         if (kids != null) 
             for (Tree kid : kids) {
-                this.kids.add(kid);
+                //Avoid setting off the listeners
+                children.add(kid);
             }
     }
     public Tree(String data) { this(data, null); }
     public Tree(Iterable<Tree> kids) { this(null, kids); }
     public Tree(Object o) {
-        if (o != null)
-            System.out.println(o.getClass().getName() + " " + o);
-        else
-            System.out.println("null");
-
-        if (o instanceof Pair) {
-            Pair p = (Pair)o;
-            this.kids.add(new Tree(p.first));
-            this.kids.add(new Tree(p.rest));
-        } else if (o != null) {
-            this.data = o.toString();
-        } else {
-            this.data = "";
-        }
+        setData(o, false);
     }
 
     public Tree(){ }
@@ -39,11 +29,11 @@ public class Tree {
     @Override
     public String toString()
     {
-        if (getData() != null && getKids().size() == 0)
+        if (getData() != null && getChildren().size() == 0)
             return getData();
 
         String rv = "";
-        for (Tree kid : getKids()) {
+        for (Tree kid : getChildren()) {
             rv += " " + kid;
         }
 
@@ -61,6 +51,37 @@ public class Tree {
         return data;
     }
 
+    public void setData(Object o){
+         setData(o, true);
+    }
+
+    private void setData(Object o, boolean fireListener){
+         //Check if we already have data, if we do, remove it.
+        if (!children.isEmpty())
+            removeChildren();
+
+        if (o != null)
+            System.out.println(o.getClass().getName() + " " + o);
+        else
+            System.out.println("null");
+
+        if (o instanceof Pair) {
+            Pair p = (Pair)o;
+            this.children.add(new Tree(p.first));
+            this.children.add(new Tree(p.rest));
+        } else if (o != null) {
+            this.data = o.toString();
+        } else {
+            this.data = "";
+        }
+        if (fireListener)
+            fireDataChangedEvent();
+    }
+
+    public void setData(String data){
+        this.data = data;
+    }
+
     public String getNodeName()
     {
         if (getData() != null)
@@ -72,21 +93,28 @@ public class Tree {
     /**
      * @return the kids
      */
-    public Vector<Tree> getKids() 
+    public Vector<Tree> getChildren()
     {
-        return kids;
+        return children;
     }
 
     public void addChild(Tree child)
     {
-        kids.add(child);
+        children.add(child);
+        fireNodeAddedEvent(child);
     }
+
+    public void removeChildren(){
+        children.clear();
+        fireChildrenClearedEvent();
+    }
+
 
     public int depth()
     {
         int depth = 1;
-        if (kids != null) {
-            for (Tree kid : kids) {
+        if (children != null) {
+            for (Tree kid : children) {
                 int kd = kid.depth();
                 if (1 + kd > depth) {
                     depth = 1 + kd;
@@ -95,5 +123,31 @@ public class Tree {
         }
 
         return depth;
+    }
+
+    public void addNodeChangeListener(NodeChangeListener listener){
+        listeners.add(listener);
+    }
+
+    public void removeNodeChangeListener(NodeChangeListener listener){
+        listeners.remove(listener);
+    }
+
+    private void fireNodeAddedEvent(Tree child){
+        for (NodeChangeListener nodeChangeListener : listeners) {
+            nodeChangeListener.kidAdded(this, child);
+        }
+    }
+
+    private void fireChildrenClearedEvent(){
+        for (NodeChangeListener nodeChangeListener : listeners) {
+            nodeChangeListener.childrenRemoved(this);
+        }
+    }
+
+    private void fireDataChangedEvent() {
+        for (NodeChangeListener nodeChangeListener : listeners) {
+            nodeChangeListener.dataChanged(this);
+        }
     }
 }

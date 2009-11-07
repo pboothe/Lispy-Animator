@@ -102,7 +102,7 @@ public class Lisp {
         // Now we need to make special Trees based on what kind of special thing 
         // this is
         Tree first = kids.get(0);
-        if (first.getKids() != null && first.getKids().size() > 0)
+        if (first.getChildren() != null && first.getChildren().size() > 0)
             return new Tree(kids);
 
         kids.remove(0);
@@ -111,7 +111,7 @@ public class Lisp {
             // (fun name arg1 arg2 [...] body) ; note that args are optional
             if (kids.size() <= 1) 
                 throw new CompilationException(code);
-            if (kids.get(1).getKids() == null)
+            if (kids.get(1).getChildren() == null)
                 throw new CompilationException(code);
 
             return new Tree("fun", kids);

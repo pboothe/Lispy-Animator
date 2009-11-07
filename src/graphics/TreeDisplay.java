@@ -68,7 +68,7 @@ public class TreeDisplay extends JComponent {
             layers.get(layer).add(n);
             positions.put(t, n);
 
-            for (Tree kid : t.getKids()) {
+            for (Tree kid : t.getChildren()) {
                 next_layer.add(kid);
             }
         }
@@ -92,7 +92,7 @@ public class TreeDisplay extends JComponent {
             }
 
             for (Node n : positions.values()) {
-                for (Tree kid : n.data.getKids()) {
+                for (Tree kid : n.data.getChildren()) {
                     Node knode = positions.get(kid);
                     Node.drawLine(n, knode, g2);
                 }
@@ -136,7 +136,7 @@ public class TreeDisplay extends JComponent {
 
             // Springs
             for (Node n : positions.values()) {
-                for (Tree kidt : n.data.getKids()) {
+                for (Tree kidt : n.data.getChildren()) {
                     Node kid = positions.get(kidt);
 
                     // F = -k*d
