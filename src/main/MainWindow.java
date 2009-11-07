@@ -55,6 +55,7 @@ class BottomInput extends JPanel {
             return false;
         }
       }
+
       text.setBackground(stack.isEmpty() ? Color.WHITE : Color.decode("#FA8072") );
       if (stack.isEmpty()) { 
           return true;
@@ -75,7 +76,7 @@ class BottomInput extends JPanel {
       text.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { if (checkSyntax()) actionListener.actionPerformed(null); }
             public void removeUpdate(DocumentEvent e) { if (checkSyntax()) actionListener.actionPerformed(null); }
-            public void changedUpdate(DocumentEvent e) { if (checkSyntax()) actionListener.actionPerformed(null); }
+            public void changedUpdate(DocumentEvent e) { }
           });
   }
 }
@@ -101,37 +102,36 @@ public class MainWindow extends JFrame {
     maininput.add(new JScrollPane(bottomInput));
 
     bottomInput.setPlayButtonAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){
-        performLayout();
-      }
+      public void actionPerformed(ActionEvent e){ step(); }
     });
 
     bottomInput.setChangeAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){
-        performLayout();
+      public void actionPerformed(ActionEvent e){ 
+          outputtext.setText(bottomInput.getText().replace('\n', ' '));
+          performLayout(); 
       }
     });
 
     pack();
   }
 
-  private void performLayout(){
-    
-    final String code = bottomInput.getText();
-    if (code == null || code.isEmpty() )
-      return;
-
+  synchronized private void performLayout()
+  {
     new Thread(){
         private CompilationException ce = null;
         private Object lisp = null;
         
         @Override
         public void run(){
-          lisp =  new InputPort(new StringReader(code)).read();
-          outputtext.setText(lisp.toString());
+          String code = outputtext.getText();
+          int i = code.lastIndexOf("\n");
+          code = code.substring(i+1);
+          Object lisp =  new InputPort(new StringReader(code)).read();
+          treeDisplay.setTree(new Tree(lisp));
+          
           if (lisp == InputPort.EOF) {
-            treeDisplay.setMessage(ce.getMessage());
-            System.out.println(ce.getMessage());
+            treeDisplay.setMessage("Problem with: " + code);
+            System.out.println("Problem with: " + code);
           }else{
             treeDisplay.setTree(new Tree(lisp));
             System.out.println(lisp.toString());
@@ -143,11 +143,29 @@ public class MainWindow extends JFrame {
             double d = treeDisplay.adjust();
             if (d != -1 && d < 10)
                 break;
-            if (count % 10 == 0) treeDisplay.repaint();
+            if (count % 10 == 0) 
+                treeDisplay.repaint();
           }
           treeDisplay.repaint();
         }
       }.start();
+  }
+
+  private void step()
+  {
+    if (outputtext.getText() == null || outputtext.getText().trim().equals("")) {
+        outputtext.setText(bottomInput.getText().replace('\n', ' '));
+    }
+
+    String code = outputtext.getText();
+    int i = code.lastIndexOf("\n");
+    code = code.substring(i+1);
+    Object lisp =  new InputPort(new StringReader(code)).read();
+    System.out.println("code = \"" + code + "\", lisp=" + lisp);
+    lisp = new Scheme(new String[]{}).eval(lisp);
+    outputtext.append("\n" + lisp.toString());
+
+    performLayout();
   }
 
 
@@ -166,7 +184,7 @@ public class MainWindow extends JFrame {
                 String in;
                 while( (in = reader.readLine()) != null){
                     m.bottomInput.text.append(in);
-                    //I like to imagine that a  buffer is used in the textarea
+                    //I like to imagine that a buffer is used in the textarea
                     //So I'm avoiding concatination.
                     m.bottomInput.text.append("\n");
                 }

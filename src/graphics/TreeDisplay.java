@@ -82,13 +82,13 @@ public class TreeDisplay extends JComponent {
         synchronized (this) {
             Graphics2D g2 = graphicsPrep(g);
             if (message != null){
-                g.drawString(message, getWidth()/2, getHeight()/2);
+                g.drawString(message, 0, getHeight()/2);
                 return;
             } 
 
             if (treechanged) {
                 treechanged = false;
-                layout(tree, getWidth()/2, PADDING);
+                layout(tree, 0, PADDING);
             }
 
             for (Node n : positions.values()) {
@@ -168,7 +168,10 @@ public class TreeDisplay extends JComponent {
 
         double totalpixels = depth * 50 + 40;
         double available = getHeight();
-        g.scale(available / totalpixels, available / totalpixels);
+        double scale = available / totalpixels;
+
+        g.scale(scale, scale);
+        g.translate(getWidth()/2/scale,0);
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         return g;

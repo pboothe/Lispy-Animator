@@ -15,4 +15,10 @@
 	<target name="run">
 		<java classname="main.MainWindow" classpath="build/" fork="true" />
 	</target>
+
+	<target name="runfib">
+                <java classname="main.MainWindow" classpath="build/" fork="true">
+                    <arg value="lisp/fib.lisp" />
+                </java>
+	</target>
 </project>
