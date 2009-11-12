@@ -7,7 +7,7 @@ public class Tree {
     private String data = null;
     private Vector<Tree> children = new Vector<Tree>();
     
-    Vector<NodeChangeListener> listeners = new Vector<NodeChangeListener>();
+    Vector<TreeChangeListener> listeners = new Vector<TreeChangeListener>();
 
     public Tree(String data, Iterable<Tree> kids) 
     {
@@ -82,7 +82,7 @@ public class Tree {
         this.data = data;
     }
 
-    public String getNodeName()
+    public String getTreeName()
     {
         if (getData() != null)
             return getData();
@@ -101,7 +101,7 @@ public class Tree {
     public void addChild(Tree child)
     {
         children.add(child);
-        fireNodeAddedEvent(child);
+        fireTreeAddedEvent(child);
     }
 
     public void removeChildren(){
@@ -125,28 +125,28 @@ public class Tree {
         return depth;
     }
 
-    public void addNodeChangeListener(NodeChangeListener listener){
+    public void addTreeChangeListener(TreeChangeListener listener){
         listeners.add(listener);
     }
 
-    public void removeNodeChangeListener(NodeChangeListener listener){
+    public void removeTreeChangeListener(TreeChangeListener listener){
         listeners.remove(listener);
     }
 
-    private void fireNodeAddedEvent(Tree child){
-        for (NodeChangeListener nodeChangeListener : listeners) {
+    private void fireTreeAddedEvent(Tree child){
+        for (TreeChangeListener nodeChangeListener : listeners) {
             nodeChangeListener.kidAdded(this, child);
         }
     }
 
     private void fireChildrenClearedEvent(){
-        for (NodeChangeListener nodeChangeListener : listeners) {
+        for (TreeChangeListener nodeChangeListener : listeners) {
             nodeChangeListener.childrenRemoved(this);
         }
     }
 
     private void fireDataChangedEvent() {
-        for (NodeChangeListener nodeChangeListener : listeners) {
+        for (TreeChangeListener nodeChangeListener : listeners) {
             nodeChangeListener.dataChanged(this);
         }
     }
