@@ -39,6 +39,7 @@ public class Node {
     double x, y;
     double fx;
     double vx=0;
+    double opacity = 1;
     Tree data;
     
 
@@ -82,7 +83,12 @@ public class Node {
         return metrics.getStringBounds(data.getTreeName(), g);
     }
 
-    
+    public void setOpacity(double opacity){
+	this.opacity = opacity;
 
+    }
 
+    public double getOpacity(){
+    	return opacity;
+    }
 }
