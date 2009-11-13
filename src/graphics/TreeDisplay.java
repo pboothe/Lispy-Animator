@@ -4,16 +4,20 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.*;
-import main.Tree;
+import main.*;
 
-public class TreeDisplay extends JComponent {
+public class TreeDisplay extends JComponent implements TreeChangeListener{
 
     private static final Color BACKGROUND = Color.decode("0xAAffff");
     private static final int PADDING = 20;
 
     private Map<Tree, Node> positions;
     private Vector<Vector<Node>> layers;
+
+    //This is probably over kill, Dr, Boothe gets to decide.
+    private Queue<Animation> animations = new ConcurrentLinkedQueue<Animation>();
 
     private Tree tree;
     private String message = "Enter some code to run!";
@@ -62,6 +66,7 @@ public class TreeDisplay extends JComponent {
             }
 
             t = curr_layer.remove();
+	    t.addTreeChangeListener(this);
             Node n = new Node(t, xpos, (layer+1)*50);
             xpos += 40;
 
@@ -175,5 +180,21 @@ public class TreeDisplay extends JComponent {
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         return g;
+    }
+
+    /**
+     * ADD YOUR ANIMATION ADDING TO QUEUE CODE HERE!!!
+     */
+    public void kidAdded(Tree parent, Tree addedNode){
+
+//      animations.offer(new AddAnimation())
+    }
+
+    public void childrenRemoved(Tree parent){
+//      animations.offer(new RemoveAnimation())
+    }
+
+    public void dataChanged(Tree parent){
+//      animations.offer(new ChangeAnimation())
     }
 }
