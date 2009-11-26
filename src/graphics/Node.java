@@ -39,6 +39,7 @@ public class Node {
     double x, y;
     double fx;
     double vx=0;
+    double opacity = 1;
     Tree data;
     
 
@@ -71,7 +72,7 @@ public class Node {
                    ROUNDING, ROUNDING);
 
         g.setColor(TEXT);
-        g.drawString(data.getNodeName(), (int)(x - bounds.getWidth()/2),
+        g.drawString(data.getTreeName(), (int)(x - bounds.getWidth()/2),
                                          (int)(y + bounds.getHeight()/2) );
 
         
@@ -79,10 +80,15 @@ public class Node {
 
     public Rectangle2D getBounds(Graphics g){
         FontMetrics metrics = g.getFontMetrics(FONT);
-        return metrics.getStringBounds(data.getNodeName(), g);
+        return metrics.getStringBounds(data.getTreeName(), g);
     }
 
-    
+    public void setOpacity(double opacity){
+	this.opacity = opacity;
 
+    }
 
+    public double getOpacity(){
+    	return opacity;
+    }
 }
