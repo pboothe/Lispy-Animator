@@ -87,7 +87,7 @@ public class Tree {
         if (getData() != null)
             return getData();
         else
-            return "β";
+            return "";
     }
 
     /**

@@ -12,11 +12,11 @@
 	</target>
 
 
-	<target name="run">
+	<target name="run" depends="build">
 		<java classname="main.MainWindow" classpath="build/" fork="true" />
 	</target>
 
-	<target name="runfib">
+	<target name="runfib" depends="build">
                 <java classname="main.MainWindow" classpath="build/" fork="true">
                     <arg value="lisp/fib.lisp" />
                 </java>
