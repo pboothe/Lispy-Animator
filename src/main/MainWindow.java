@@ -108,47 +108,27 @@ public class MainWindow extends JFrame {
     bottomInput.setChangeAction(new ActionListener(){
       public void actionPerformed(ActionEvent e){ 
           outputtext.setText(bottomInput.getText().replace('\n', ' '));
-          performLayout(); 
+          startLayout(); 
       }
     });
 
     pack();
   }
 
-  synchronized private void performLayout()
+  synchronized private void startLayout()
   {
-    new Thread(){
-        private CompilationException ce = null;
-        private Object lisp = null;
-        
-        @Override
-        public void run(){
-          String code = outputtext.getText();
-          int i = code.lastIndexOf("\n");
-          code = code.substring(i+1);
-          Object lisp =  new InputPort(new StringReader(code)).read();
-          treeDisplay.setTree(new Tree(lisp));
-          
-          if (lisp == InputPort.EOF) {
-            treeDisplay.setMessage("Problem with: " + code);
-            System.out.println("Problem with: " + code);
-          }else{
-            treeDisplay.setTree(new Tree(lisp));
-            System.out.println(lisp.toString());
-          }
-
-          treeDisplay.repaint();
-          int count = 0;
-          while (true) {
-            double d = treeDisplay.adjust();
-            if (d != -1 && d < 10)
-                break;
-            if (count % 10 == 0) 
-                treeDisplay.repaint();
-          }
-          treeDisplay.repaint();
-        }
-      }.start();
+      String code = outputtext.getText();
+      int i = code.lastIndexOf("\n");
+      code = code.substring(i+1);
+      Object lisp =  new InputPort(new StringReader(code)).read();
+      
+      if (lisp == InputPort.EOF) {
+        treeDisplay.setMessage("Problem with: " + code);
+        System.out.println("Problem with: " + code);
+      }else{
+        treeDisplay.setTree(new Tree(lisp));
+        System.out.println(lisp.toString());
+      }
   }
 
   private void step()
@@ -165,7 +145,7 @@ public class MainWindow extends JFrame {
     lisp = new Scheme(new String[]{}).eval(lisp);
     outputtext.append("\n" + lisp.toString());
 
-    performLayout();
+    startLayout();
   }
 
 

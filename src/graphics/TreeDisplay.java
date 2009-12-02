@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 import javax.swing.*;
 import main.*;
 
@@ -17,7 +17,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     private Vector<Vector<Node>> layers;
 
     //This is probably over kill, Dr, Boothe gets to decide.
-    private Queue<Animation> animations = new ConcurrentLinkedQueue<Animation>();
+    private BlockingQueue<Animation> animations = new LinkedBlockingQueue<Animation>();
 
     private Tree tree;
     private String message = "Enter some code to run!";
@@ -27,6 +27,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     public TreeDisplay()
     {
         super();
+        start();
     }
 
     public void setTree(Tree tree)
@@ -40,6 +41,32 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     public void setMessage(String message) 
     {
         this.message = message;
+    }
+
+    public void start()
+    {
+        new Thread() {
+            public void run()
+            {
+                while (true) {
+                    adjust();
+                    repaint();
+                    try { Thread.sleep(1); } catch (InterruptedException ie) {}
+                }
+            }
+        }.start();
+
+        new Thread() {
+            public void run()
+            {
+                while (true) {
+                    try {
+                        Animation a = animations.take();
+                        a.animate();
+                    } catch (InterruptedException ie) {}
+                }
+            }
+        }.start();
     }
 
     private void layout(Tree t, double x, double y) 
@@ -68,7 +95,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             t = curr_layer.remove();
 	    t.addTreeChangeListener(this);
             Node n = new Node(t, xpos, (layer+1)*50);
-            xpos += 40;
+            xpos += n.width + PADDING;
 
             layers.get(layer).add(n);
             positions.put(t, n);
@@ -128,12 +155,16 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
 
                 for (int j = 0; j < layer.size(); j++) {
                     if (j > 0) {
-                        double d = layer.get(j).x - layer.get(j-1).x;
+                        Node r = layer.get(j);
+                        Node l = layer.get(j-1);
+                        double d = (l.x + l.width/2) - (r.x - r.width/2);
                         layer.get(j).fx += 1000.0 / (d*d);
                     }
 
                     if (j < layer.size()-1) {
-                        double d = layer.get(j+1).x - layer.get(j).x;
+                        Node l = layer.get(j);
+                        Node r = layer.get(j+1);
+                        double d = (l.x + l.width/2) - (r.x - r.width/2);
                         layer.get(j).fx -= 1000.0 / (d*d);
                     }
                 }
@@ -158,8 +189,6 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                 n.vx = n.vx*.9 + 100*n.fx;
                 n.x += .01*n.vx;
                 total += Math.abs(100*n.fx);
-
-                if (n.x < 0) { n.x = 0; }
             }
 
             return total;
@@ -185,16 +214,36 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     /**
      * ADD YOUR ANIMATION ADDING TO QUEUE CODE HERE!!!
      */
-    public void kidAdded(Tree parent, Tree addedNode){
-
-//      animations.offer(new AddAnimation())
+    public void kidAdded(final Tree parent, final Tree addedNode){
+        animations.offer(new Animation() {
+                    void animate()
+                    {
+                        System.out.println("Animating the addition (not) of " + addedNode + " to " + parent);
+                        try { Thread.sleep(2000); } catch (Exception e) {}
+                        System.out.println("Done animating the addition (not) of " + addedNode + " to " + parent);
+                    }
+                });
     }
 
-    public void childrenRemoved(Tree parent){
-//      animations.offer(new RemoveAnimation())
+    public void childrenRemoved(final Tree parent){
+        animations.offer(new Animation() {
+                    void animate()
+                    {
+                        System.out.println("Animating the removal (not) of " + parent);
+                        try { Thread.sleep(2000); } catch (Exception e) {}
+                        System.out.println("Done animating the removal (not) of " + parent);
+                    }
+                });
     }
 
-    public void dataChanged(Tree parent){
-//      animations.offer(new ChangeAnimation())
+    public void dataChanged(final Tree parent){
+        animations.offer(new Animation() {
+                    void animate()
+                    {
+                        System.out.println("Animating the removal (not) of " + parent);
+                        try { Thread.sleep(2000); } catch (Exception e) {}
+                        System.out.println("Done animating the removal (not) of " + parent);
+                    }
+                });
     }
 }

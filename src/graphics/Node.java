@@ -40,6 +40,7 @@ public class Node {
     double fx;
     double vx=0;
     double opacity = 1;
+    double width = 70;
     Tree data;
     
 
@@ -55,6 +56,7 @@ public class Node {
         g.setFont(FONT);
 
         Rectangle2D bounds = getBounds(g);
+        width = bounds.getWidth();
 
         g.setStroke(STROKE);
         g.setColor(BACKGROUND);
