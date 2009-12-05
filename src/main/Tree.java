@@ -68,7 +68,13 @@ public class Tree {
         if (o instanceof Pair) {
             Pair p = (Pair)o;
             this.children.add(new Tree(p.first));
-            this.children.add(new Tree(p.rest));
+            o = p.rest;
+            while (o instanceof Pair) {
+                p = (Pair)o;
+                System.out.println("" + p.first + " is a child of " + this);
+                this.children.add(new Tree(p.first));
+                o = p.rest;
+            }
         } else if (o != null) {
             this.data = o.toString();
         } else {

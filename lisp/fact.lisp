@@ -1,0 +1,10 @@
+(((lambda (f) (f f) ) 
+  (lambda (f) 
+    (lambda (n) 
+     (if (< n 2) 
+      1
+      (* n ((f f) (- n 1)))
+     )
+    )
+  )
+) 12)
