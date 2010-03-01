@@ -1,9 +1,16 @@
 package graphics;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.Vector;
-import main.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.Toolkit;
+import java.awt.geom.Rectangle2D;
+
+import main.Tree;
 
 public class Node {
     private static final int PADDING = 5;
@@ -22,7 +29,7 @@ public class Node {
     public static void drawLine(Node start, Node end, Graphics2D g){
         double startx = start.x;
         double start_dy = (start.getBounds(g).getHeight()/2);
-        if (start.getBounds(g).getWidth() >  10 ){//Found expeirementally
+        if (start.getBounds(g).getWidth() >  10 ){//Found experimentally
             startx += (end.x - start.x) * (start_dy/(end.y-start.y));
         }
         g.setStroke(STROKE);

@@ -1,20 +1,30 @@
 package graphics;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.concurrent.*;
-import javax.swing.*;
-import main.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Vector;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JComponent;
+
+import main.Tree;
+import main.TreeChangeListener;
 
 public class TreeDisplay extends JComponent implements TreeChangeListener{
 
     private static final Color BACKGROUND = Color.decode("0xAAffff");
     private static final int PADDING = 20;
 
-    private Map<Tree, Node> positions;
-    private Vector<Vector<Node>> layers;
+    protected Map<Tree, Node> positions;
+    protected Vector<Vector<Node>> layers;
 
     //This is probably over kill, Dr, Boothe gets to decide.
     private BlockingQueue<Animation> animations = new LinkedBlockingQueue<Animation>();
@@ -24,10 +34,15 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     private boolean treechanged = false;
     private boolean laidout = false;
 
+    public TreeDisplay(boolean shouldgo) 
+    {
+    	super();
+    	if (shouldgo) start();
+    }
+    
     public TreeDisplay()
     {
-        super();
-        start();
+        this(true);
     }
 
     public void setTree(Tree tree)
@@ -52,24 +67,17 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                     adjust();
                     repaint();
                     try { Thread.sleep(1); } catch (InterruptedException ie) {}
-                }
-            }
-        }.start();
 
-        new Thread() {
-            public void run()
-            {
-                while (true) {
-                    try {
-                        Animation a = animations.take();
-                        a.animate();
-                    } catch (InterruptedException ie) {}
+					try {
+						Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
+	                    if (a != null) a.animate();
+					} catch (InterruptedException e) {}
                 }
             }
         }.start();
     }
 
-    private void layout(Tree t, double x, double y) 
+    protected void layout(Tree t, double x, double y) 
     {
         positions = new HashMap<Tree,Node>();
         layers = new Vector<Vector<Node>>();
@@ -126,6 +134,8 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             for (Node n : positions.values()) {
                 for (Tree kid : n.data.getChildren()) {
                     Node knode = positions.get(kid);
+                    if (knode == null) continue;
+                    
                     Node.drawLine(n, knode, g2);
                 }
             }
@@ -174,7 +184,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             for (Node n : positions.values()) {
                 for (Tree kidt : n.data.getChildren()) {
                     Node kid = positions.get(kidt);
-
+                    if (kid == null) continue;
                     // F = -k*d
                     double dx = n.x - kid.x;
                     double dy = n.y - kid.y;
@@ -215,33 +225,120 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
      * ADD YOUR ANIMATION ADDING TO QUEUE CODE HERE!!!
      */
     public void kidAdded(final Tree parent, final Tree addedNode){
+    	final Tree superTree = tree;
         animations.offer(new Animation() {
                     void animate()
                     {
-                        System.out.println("Animating the addition (not) of " + addedNode + " to " + parent);
-                        try { Thread.sleep(2000); } catch (Exception e) {}
-                        System.out.println("Done animating the addition (not) of " + addedNode + " to " + parent);
+                        System.out.println("Animating the addition of " + addedNode + " to " + parent);
+             
+                        TreeDisplay td = new TreeDisplay(false);
+                        td.setTree(superTree);
+                        td.layout(superTree, 0, PADDING);
+                        for (int i = 0; i < 50; i++) td.adjust();
+                        
+                        Map<Tree,Node> starts = new HashMap<Tree,Node>();
+                        for (Tree t : positions.keySet()) {
+                        	Node n = positions.get(t);
+                        	starts.put(t, new Node(n.data, n.x, n.y));
+                        }
+                        
+                        
+                        for (int i = 0; i < 20; i++) {
+                        	for (Tree t : positions.keySet()) {
+                        		if (starts.get(t) == null) continue;
+                        		if (td.positions.get(t) == null) continue;
+                        		if (positions.get(t) == null) continue;
+                        		
+                        		positions.get(t).x = (td.positions.get(t).x - starts.get(t).x) * i / 20.0 + starts.get(t).x;
+                        	}
+                        	repaint();
+                        	try { Thread.sleep(10); } catch (InterruptedException ie) {}
+                        }
+                        
+                        positions = td.positions;
+                        layers = td.layers;
+                        repaint();
+                        
+                        System.out.println("Done animating the addition of " + addedNode + " to " + parent);
                     }
                 });
     }
 
     public void childrenRemoved(final Tree parent){
+    	final Tree superTree = tree;
+
         animations.offer(new Animation() {
                     void animate()
                     {
                         System.out.println("Animating the removal (not) of " + parent);
-                        try { Thread.sleep(2000); } catch (Exception e) {}
+                        TreeDisplay td = new TreeDisplay(false);
+                        td.setTree(superTree);
+                        td.layout(superTree, 0, PADDING);
+                        for (int i = 0; i < 50; i++) td.adjust();
+                        
+                        Map<Tree,Node> starts = new HashMap<Tree,Node>();
+                        for (Tree t : positions.keySet()) {
+                        	Node n = positions.get(t);
+                        	starts.put(t, new Node(n.data, n.x, n.y));
+                        }
+                        
+                        
+                        for (int i = 0; i < 20; i++) {
+                        	for (Tree t : positions.keySet()) {
+                        		if (starts.get(t) == null) continue;
+                        		if (td.positions.get(t) == null) continue;
+                        		if (positions.get(t) == null) continue;
+                        		
+                        		positions.get(t).x = (td.positions.get(t).x - starts.get(t).x) * i / 20.0 + starts.get(t).x;
+                        	}
+                        	repaint();
+                        	try { Thread.sleep(10); } catch (InterruptedException ie) {}
+                        }
+                        
+                        positions = td.positions;
+                        layers = td.layers;
+                        repaint();
                         System.out.println("Done animating the removal (not) of " + parent);
                     }
                 });
     }
 
     public void dataChanged(final Tree parent){
-        animations.offer(new Animation() {
+    	final Tree superTree = tree;
+
+    	animations.offer(new Animation() {
                     void animate()
                     {
                         System.out.println("Animating the removal (not) of " + parent);
-                        try { Thread.sleep(2000); } catch (Exception e) {}
+
+                        TreeDisplay td = new TreeDisplay(false);
+                        td.setTree(superTree);
+                        td.layout(superTree, 0, PADDING);
+                        for (int i = 0; i < 50; i++) td.adjust();
+                        
+                        Map<Tree,Node> starts = new HashMap<Tree,Node>();
+                        for (Tree t : positions.keySet()) {
+                        	Node n = positions.get(t);
+                        	starts.put(t, new Node(n.data, n.x, n.y));
+                        }
+                        
+                        
+                        for (int i = 0; i < 20; i++) {
+                        	for (Tree t : positions.keySet()) {
+                        		if (starts.get(t) == null) continue;
+                        		if (td.positions.get(t) == null) continue;
+                        		if (positions.get(t) == null) continue;
+                        		
+                        		positions.get(t).x = (td.positions.get(t).x - starts.get(t).x) * i / 20.0 + starts.get(t).x;
+                        	}
+                        	repaint();
+                        	try { Thread.sleep(10); } catch (InterruptedException ie) {}
+                        }
+                        
+                        positions = td.positions;
+                        layers = td.layers;
+                        repaint();
+                        
                         System.out.println("Done animating the removal (not) of " + parent);
                     }
                 });

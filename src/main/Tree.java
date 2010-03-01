@@ -115,7 +115,6 @@ public class Tree {
         fireChildrenClearedEvent();
     }
 
-
     public int depth()
     {
         int depth = 1;
@@ -155,5 +154,15 @@ public class Tree {
         for (TreeChangeListener nodeChangeListener : listeners) {
             nodeChangeListener.dataChanged(this);
         }
+    }
+    
+    Vector<Tree> preorder()
+    {
+    	Vector<Tree> answer = new Vector<Tree>();
+    	answer.add(this);
+    	for (Tree kid : children)
+    		for (Tree t : kid.preorder())
+    			answer.add(t);
+    	return answer;
     }
 }
