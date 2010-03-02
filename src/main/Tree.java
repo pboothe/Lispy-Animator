@@ -105,6 +105,16 @@ public class Tree {
     {
         return children;
     }
+    
+    /**
+     * Returns the child at the given position, null if none is there
+     * @param child
+     */
+    public Tree getChild(int i){
+      if (i >= children.size())
+        return null;
+      return children.get(i);
+    }
 
     public void addChild(Tree child)
     {
@@ -170,4 +180,5 @@ public class Tree {
     			answer.add(t);
     	return answer;
     }
+    
 }

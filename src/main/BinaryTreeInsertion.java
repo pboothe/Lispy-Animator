@@ -1,14 +1,14 @@
 package main;
 
-import java.util.Vector;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
 
-public class BinaryInsertion extends LispFreeWindow{
+public class BinaryTreeInsertion extends LispFreeWindow{
 
-  public BinaryInsertion(){
-    super("Binary Insertion");
+  public BinaryTreeInsertion(){
+    super("Binary Tree Insertion");
   }
   
   protected Tree getStartingTree(){
@@ -32,7 +32,8 @@ public class BinaryInsertion extends LispFreeWindow{
   
   private void insertNumber(int num){
     
-    Tree tree2Insert = new Tree(String.valueOf(num), null);
+    //Binary trees always have 2 children, even in our case
+    Tree tree2Insert = new Tree(String.valueOf(num), Arrays.asList(new Tree[]{new Tree("", null), new Tree("", null)}));
     
     //Check if the head is empty, if it is, then just make this the head
     if (tree.getData() == null || tree.getData().isEmpty()){
@@ -41,35 +42,33 @@ public class BinaryInsertion extends LispFreeWindow{
       return;
     }
     
-    //Replacing the head is kind of a special case
-    if (num <= new Integer(tree.getData()) ) {
-      tree2Insert.addChild(tree);
-      tree = tree2Insert;
-      treeDisplay.setTree(tree);
-      repaint();
-      return;
-    }
+    final int LEFT = 0;
+    final int RIGHT = 1;
     
-    //Ok now do a normal binary insertion
     Tree current = tree;
-    Tree parent = null; //We need to know the parent to insert the new node
-    while(!current.getChildren().isEmpty()){
-      parent = current;
-      current = current.getChildren().firstElement();
-      if (new Integer(current.getData()) > num){
-        //Insert!!
-        //remove children from parent and move them to tree2Insert
-        for(Tree t : parent.getChildren()){
-          tree2Insert.addChild(t);
+    while (true){
+      if (num < Integer.parseInt(current.getData())){
+        Tree left = current.getChild(LEFT);
+        if (left.getData().isEmpty()){
+          left.setData(num);
+          left.addChild(new Tree("", null));
+          left.addChild(new Tree("", null));
+          return;
+        }else{
+          current = left;
         }
-        parent.removeChildren();
-        parent.addChild(tree2Insert);
-        return;
+      }else{
+        Tree right = current.getChild(RIGHT);
+        if (right.getData().isEmpty()){
+          right.setData(num);
+          right.addChild(new Tree("", null));
+          right.addChild(new Tree("", null));
+          return;
+        }else{
+          current = right;
+        }
       }
     }
-    
-    //If we make to here that means that we just add to the tail of the tree
-    current.addChild(tree2Insert);
   }
   
 
@@ -77,7 +76,7 @@ public class BinaryInsertion extends LispFreeWindow{
    * @param args
    */
   public static void main(String[] args) {
-    BinaryInsertion m = new BinaryInsertion();
+    BinaryTreeInsertion m = new BinaryTreeInsertion();
     m.setSize(800, 600);
     m.setVisible(true);
     m.setDefaultCloseOperation(EXIT_ON_CLOSE);
