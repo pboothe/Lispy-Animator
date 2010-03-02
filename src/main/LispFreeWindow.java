@@ -14,7 +14,7 @@ import jscheme.*;
 
 public class LispFreeWindow extends JFrame {
 
-	Tree tree;
+  Tree tree;
   private TreeDisplay treeDisplay = new TreeDisplay();
   JSplitPane maininput, output;
   JTextArea outputtext = new JTextArea(){{setEditable(false);}};

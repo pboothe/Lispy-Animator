@@ -16,17 +16,17 @@ public class Node {
     private static final int PADDING = 5;
     private static final int ROUNDING = 20;
 
-    private static final Color BACKGROUND = Color.WHITE;
-    private static final Color TEXT = Color.BLACK;
-    private static final Color BORDER = Color.BLACK;
-    private static final Stroke STROKE = new BasicStroke(2);
+    private Color BACKGROUND = Color.WHITE;
+    private Color TEXT = Color.BLACK;
+    private Color BORDER = Color.BLACK;
+    private Stroke STROKE = new BasicStroke(2);
     
     //Taken from: http://www.3rd-evolution.de/tkrammer/docs/java_font_size.html
     //To ensure that we got the same font size regardless of OS/DPI/Resolution
     private static final int FONTSIZE = (int)Math.round(12.0 * Toolkit.getDefaultToolkit().getScreenResolution() / 72.0);
     private static final Font FONT = new Font("Arial", Font.BOLD, FONTSIZE);
 
-    public static void drawLine(Node start, Node end, Graphics2D g){
+    public void drawLine(Node start, Node end, Graphics2D g){
         double startx = start.x;
         double start_dy = (start.getBounds(g).getHeight()/2);
         if (start.getBounds(g).getWidth() >  10 ){//Found experimentally
@@ -94,7 +94,9 @@ public class Node {
 
     public void setOpacity(double opacity){
 	this.opacity = opacity;
-
+        BACKGROUND = new Color(BACKGROUND.getRed(), BACKGROUND.getGreen(), BACKGROUND.getBlue(), (int)(opacity*255));
+        TEXT = new Color(TEXT.getRed(), TEXT.getGreen(), TEXT.getBlue(), (int)(opacity*255));
+        BORDER = new Color(BORDER.getRed(), BORDER.getGreen(), BORDER.getBlue(), (int)(opacity*255));
     }
 
     public double getOpacity(){
