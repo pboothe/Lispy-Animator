@@ -2,27 +2,31 @@ package main;
 
 import graphics.TreeDisplay;
 
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Vector;
 
-import javax.swing.*;
-
-import jscheme.*;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 
 
 public class LispFreeWindow extends JFrame {
 
   Tree tree;
-  private TreeDisplay treeDisplay = new TreeDisplay();
+  protected TreeDisplay treeDisplay = new TreeDisplay();
   JSplitPane maininput, output;
-  JTextArea outputtext = new JTextArea(){{setEditable(false);}};
-  private BottomInput bottomInput = new BottomInput();
-
-  public LispFreeWindow()
+  protected JTextArea outputtext = new JTextArea(){{setEditable(false);}};
+  protected BottomInput bottomInput = new BottomInput();
+  
+  public LispFreeWindow(){
+    this("Lispy Animator");
+  }
+  
+  protected LispFreeWindow(String title)
   {
-    super("Lispy Animator");
+    super(title);
 
     maininput = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
     output =  new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -47,8 +51,12 @@ public class LispFreeWindow extends JFrame {
 
     pack();
 
-    tree = new Tree("hello", Arrays.asList(new Tree[] { new Tree("there", null), new Tree("you", null) }));
+    tree = getStartingTree();
     treeDisplay.setTree(tree);
+  }
+  
+  protected Tree getStartingTree(){
+    return new Tree("hello", Arrays.asList(new Tree[] { new Tree("there", null), new Tree("you", null) }));
   }
 
   synchronized private void startLayout()
@@ -57,7 +65,7 @@ public class LispFreeWindow extends JFrame {
 
   Tree newkid = null;
   
-  private void step()
+  protected void step()
   {
     if (outputtext.getText() == null || outputtext.getText().trim().equals("")) {
         outputtext.setText(bottomInput.getText().replace('\n', ' '));

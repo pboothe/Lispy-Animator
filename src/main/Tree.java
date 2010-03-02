@@ -34,6 +34,8 @@ public class Tree {
 
         String rv = "";
         for (Tree kid : getChildren()) {
+            if (kid == this)
+              continue;
             rv += " " + kid;
         }
 
@@ -120,6 +122,9 @@ public class Tree {
         int depth = 1;
         if (children != null) {
             for (Tree kid : children) {
+                if (kid == this){
+                  continue;
+                }
                 int kd = kid.depth();
                 if (1 + kd > depth) {
                     depth = 1 + kd;
