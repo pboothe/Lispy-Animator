@@ -68,10 +68,10 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                     repaint();
                     try { Thread.sleep(1); } catch (InterruptedException ie) {}
 
-					try {
-						Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
-	                    if (a != null) a.animate();
-					} catch (InterruptedException e) {}
+                    try {
+                        Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
+                        if (a != null) a.animate();
+                    } catch (InterruptedException e) {}
                 }
             }
         }.start();
@@ -102,7 +102,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
 
             t = curr_layer.remove();
 	    t.addTreeChangeListener(this);
-            Node n = new Node(t, xpos, (layer+1)*50);
+            Node n = new Node(t, xpos, (layer+1)*50, cachedGraphics);
             xpos += n.width + PADDING;
 
             layers.get(layer).add(n);
@@ -205,8 +205,11 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
         }
     }
 
+    Graphics cachedGraphics;
+
     private Graphics2D graphicsPrep(Graphics g1)
     {
+        cachedGraphics = g1;
         Graphics2D g = (Graphics2D)g1;
         int depth = tree != null ? tree.depth() : 1;
 
@@ -240,9 +243,10 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                     {
                         // Make the new layout
                         TreeDisplay td = new TreeDisplay(false);
+                        td.cachedGraphics = cachedGraphics;
                         td.setTree(superTree);
                         td.layout(superTree, 0, PADDING);
-                        for (int i = 0; i < 50; i++) td.adjust();
+                        while (td.adjust() > 10) ;
                        
                         // Fade out all of the removed nodes
                         LinkedList<Tree> removal = new LinkedList<Tree>();
@@ -265,7 +269,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                         Map<Tree,Node> starts = new HashMap<Tree,Node>();
                         for (Tree t : positions.keySet()) {
                         	Node n = positions.get(t);
-                        	starts.put(t, new Node(n.data, n.x, n.y));
+                        	starts.put(t, new Node(n.data, n.x, n.y, cachedGraphics));
                         }
                         
                         
@@ -309,8 +313,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                         }
                         
                         repaint();
-                        
-                        System.out.println("Done animating the removal (not) of " + parent);
+                        System.out.println("Done animating");
                     }
                 });
     }

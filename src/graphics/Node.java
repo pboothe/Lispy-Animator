@@ -50,12 +50,16 @@ public class Node {
     double width = 70;
     Tree data;
     
-
-    public Node(Tree data, double x, double y)
+    public Node(Tree data, double x, double y, Graphics g)
     {
         this.data = data;
         this.x = x;
         this.y = y;
+        if (g != null) {
+            width = getBounds(g).getWidth();
+        } else {
+            System.out.println("NULLLLLL");
+        }
     }
 
     void draw(Graphics2D g)

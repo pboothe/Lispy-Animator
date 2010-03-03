@@ -50,8 +50,10 @@ public class BinaryTreeInsertion extends LispFreeWindow{
       if (num < Integer.parseInt(current.getData())){
         Tree left = current.getChild(LEFT);
         if (left.getData().isEmpty()){
+          left.FIREAWAY = false;
           left.setData(num);
           left.addChild(new Tree("", null));
+          left.FIREAWAY = true;
           left.addChild(new Tree("", null));
           return;
         }else{
@@ -60,8 +62,10 @@ public class BinaryTreeInsertion extends LispFreeWindow{
       }else{
         Tree right = current.getChild(RIGHT);
         if (right.getData().isEmpty()){
+          right.FIREAWAY = false;
           right.setData(num);
           right.addChild(new Tree("", null));
+          right.FIREAWAY = true;
           right.addChild(new Tree("", null));
           return;
         }else{

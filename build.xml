@@ -20,4 +20,8 @@
                     <arg value="lisp/fib.lisp" />
                 </java>
 	</target>
+
+	<target name="runbinary" depends="build">
+		<java classname="main.BinaryTreeInsertion" classpath="build/" fork="true" />
+	</target>
 </project>
