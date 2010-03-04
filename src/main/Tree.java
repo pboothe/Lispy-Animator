@@ -99,6 +99,19 @@ public class Tree {
         return null;
       return children.get(i);
     }
+    
+    public void setChild(int position, Tree child){
+      synchronized(child){
+        children.set(position, child);
+      }
+      
+      synchronized (listeners) {
+        for (TreeChangeListener l : listeners) {
+            child.addTreeChangeListener(l);
+        }
+      }
+    }
+    
 
     public void addChild(Tree child)
     {
@@ -121,20 +134,21 @@ public class Tree {
 
     public int depth()
     {
-        int depth = 1;
-        if (children != null) {
-            for (Tree kid : children) {
-                if (kid == this){
-                  continue;
-                }
-                int kd = kid.depth();
-                if (1 + kd > depth) {
-                    depth = 1 + kd;
-                }
-            }
+        synchronized(children){
+          int depth = 1;
+          if (children != null) {
+              for (Tree kid : children) {
+                  if (kid == this || kid == null){
+                    continue;
+                  }
+                  int kd = kid.depth();
+                  if (1 + kd > depth) {
+                      depth = 1 + kd;
+                  }
+              }
+          }
+          return depth;
         }
-
-        return depth;
     }
 
     public void addTreeChangeListener(TreeChangeListener listener){
@@ -144,6 +158,7 @@ public class Tree {
 
         synchronized (children) {
             for (Tree kid : children) {
+                if (kid == null) continue;
                 kid.addTreeChangeListener(listener);
             }
         }

@@ -1,18 +1,22 @@
 package main;
 
 import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
 
 public class BinaryTreeInsertion extends LispFreeWindow{
-
+  
+  final int LEFT = 0;
+  final int RIGHT = 1;
+  
   public BinaryTreeInsertion(){
     super("Binary Tree Insertion");
   }
   
   protected Tree getStartingTree(){
-    return new Tree();
+    return new Tree("",null);
   }
   
   protected void step(){
@@ -21,7 +25,7 @@ public class BinaryTreeInsertion extends LispFreeWindow{
       String[] numbers = bottomInput.getText().split(",");
       for(String num : numbers){
         try{
-          insertNumber(new Integer(num.trim()));
+          insertNumber(Integer.parseInt(num.trim()), tree);
         }catch(NumberFormatException nfe){
           JOptionPane.showMessageDialog(this, "Please enter a list of comma seperated numbers");
         }
@@ -30,49 +34,99 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     }
   }
   
-  private void insertNumber(int num){
-    
-    //Binary trees always have 2 children, even in our case
-    Tree tree2Insert = new Tree(String.valueOf(num), Arrays.asList(new Tree[]{new Tree("", null), new Tree("", null)}));
-    
-    //Check if the head is empty, if it is, then just make this the head
-    if (tree.getData() == null || tree.getData().isEmpty()){
-      tree = tree2Insert;
-      treeDisplay.setTree(tree2Insert);
-      return;
+  private void insertNumber(int num, Tree t){
+        
+    if (t.getData().isEmpty()){
+      t.FIREAWAY = false;
+      t.setData(num);
+      t.addChild(new Tree("", null));
+      t.FIREAWAY = true;
+      t.addChild(new Tree("", null));
+    }else if ( num  < Integer.parseInt(t.getData())){
+      insertNumber(num, t.getChild(LEFT));
+      rebalance(t);
+    }else{
+      insertNumber(num, t.getChild(RIGHT));
+      rebalance(t);
     }
-    
-    final int LEFT = 0;
-    final int RIGHT = 1;
-    
-    Tree current = tree;
-    while (true){
-      if (num < Integer.parseInt(current.getData())){
-        Tree left = current.getChild(LEFT);
-        if (left.getData().isEmpty()){
-          left.FIREAWAY = false;
-          left.setData(num);
-          left.addChild(new Tree("", null));
-          left.FIREAWAY = true;
-          left.addChild(new Tree("", null));
-          return;
-        }else{
-          current = left;
-        }
+  }
+  
+  private void rebalance(Tree root){
+    int balance = balanceRatio(root);
+    System.out.println("Bal = " + balance);
+    if (balance == -2){ //Right side is too heavy
+      if(balanceRatio(root.getChild(RIGHT)) == -1){
+        leftRotation(root);
       }else{
-        Tree right = current.getChild(RIGHT);
-        if (right.getData().isEmpty()){
-          right.FIREAWAY = false;
-          right.setData(num);
-          right.addChild(new Tree("", null));
-          right.FIREAWAY = true;
-          right.addChild(new Tree("", null));
-          return;
-        }else{
-          current = right;
-        }
+        rightLeft(root);
+      }
+    }else if (balance == 2){
+      if (balanceRatio(root.getChild(LEFT)) == 1){
+        rightRotation(root);
+      }else{
+        leftRight(root);
       }
     }
+  }
+
+  private void rightRotation(Tree root){
+    Tree c = root;
+    Tree b = c.getChild(LEFT);
+    Tree a = b.getChild(LEFT);
+    
+    Tree left = a;
+    Tree right = new Tree(c.getData(), Arrays.asList(new Tree[]{b.getChild(RIGHT), c.getChild(RIGHT)}));
+    root.setData(b.getData());
+    root.removeChildren();
+    root.addChild(left);
+    root.addChild(right);
+  }
+  
+  private void leftRotation(Tree root) {
+    Tree a = root;
+    Tree b = a.getChild(RIGHT);
+    Tree c = b.getChild(RIGHT);
+    
+    Tree left = new Tree(a.getData(), Arrays.asList(new Tree[]{a.getChild(LEFT), b.getChild(LEFT)}));
+    Tree right = c;
+    root.setData(b.getData());
+    root.removeChildren();
+    root.addChild(left);
+    root.addChild(right);
+  }
+  
+  private void leftRight(Tree root){
+    Tree c = root;
+    Tree a = c.getChild(LEFT);
+    Tree b = c.getChild(RIGHT);
+    
+    Tree left = new Tree(a.getData(), Arrays.asList(new Tree[]{a.getChild(LEFT), b.getChild(LEFT)}));
+    Tree right = new Tree(c.getData(), Arrays.asList(new Tree[]{b.getChild(RIGHT), c.getChild(RIGHT)}));
+    root.setData(b.getData());
+    root.removeChildren();
+    root.addChild(left);
+    root.addChild(right);
+  }
+  
+  private void rightLeft(Tree root){
+    Tree a = root;
+    Tree c = a.getChild(RIGHT);
+    Tree b = c.getChild(LEFT);
+    
+    Tree left = new Tree(a.getData(), Arrays.asList(new Tree[]{a.getChild(LEFT), b.getChild(LEFT)}));
+    Tree right = new Tree(c.getData(), Arrays.asList(new Tree[]{b.getChild(RIGHT), c.getChild(RIGHT)}));
+    root.setData(b.getData());
+    root.removeChildren();
+    root.addChild(left);
+    root.addChild(right);
+  }
+  
+  private int balanceRatio(Tree t){
+    return height(t.getChild(LEFT)) - height(t.getChild(RIGHT));
+  }
+  
+  private int height(Tree t){
+    return t.depth();
   }
   
 
