@@ -4,10 +4,11 @@ import java.util.*;
 import jscheme.*;
 
 public class Tree {
+    protected Tree parent = null;
     private String data = null;
     private Vector<Tree> children = new Vector<Tree>();
     
-    Vector<TreeChangeListener> listeners = new Vector<TreeChangeListener>();
+    Set<TreeChangeListener> listeners = new HashSet<TreeChangeListener>();
 
     public Tree() {}
     public Tree(Object data, Iterable<Tree> kids) 
@@ -109,7 +110,14 @@ public class Tree {
     public void addChild(Tree child, boolean fire)
     {
         synchronized (children) {
+            child.parent = this;
             children.add(child);
+            depthcache = -1;
+            Tree t = parent;
+            while (t != null && t.depthcache != -1) {
+                t.depthcache = -1;
+                t = t.parent;
+            }
         }
 
         synchronized (listeners) {
@@ -122,13 +130,19 @@ public class Tree {
 
     public void removeChildren(){ removeChildren(true); }
     public void removeChildren(boolean fire){
-        synchronized (children) { children.clear(); }
+        synchronized (children) { 
+            for (Tree t : children) t.parent = null;
+            children.clear(); 
+        }
+
         if (fire) fireChildrenClearedEvent();
     }
 
+    int depthcache = -1;
     public int depth()
     {
         synchronized(children){
+          if (depthcache != -1) return depthcache;
           int depth = 1;
           if (children != null) {
               for (Tree kid : children) {
@@ -141,7 +155,7 @@ public class Tree {
                   }
               }
           }
-          return depth;
+          return depthcache = depth;
         }
     }
 

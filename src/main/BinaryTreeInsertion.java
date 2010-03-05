@@ -36,7 +36,7 @@ public class BinaryTreeInsertion extends LispFreeWindow{
   
   private void insertNumber(int num, Tree t){
         
-    if (t.getData().isEmpty()){
+    if (t.getData() == null || t.getData().isEmpty()){
       t.setData(num, false);
       t.addChild(new Tree("", null), false);
       t.addChild(new Tree("", null));
@@ -69,54 +69,109 @@ public class BinaryTreeInsertion extends LispFreeWindow{
 
   private void rightRotation(Tree root){
     Tree c = root;
+    String cdata = c.getData();
     Tree b = c.getChild(LEFT);
     Tree a = b.getChild(LEFT);
-    
-    Tree left = a;
-    Tree right = new Tree(c.getData(), Arrays.asList(new Tree[]{b.getChild(RIGHT), c.getChild(RIGHT)}));
-    root.setData(b.getData());
-    root.removeChildren();
-    root.addChild(left);
-    root.addChild(right);
+    Tree T0 = a.getChild(LEFT);
+    Tree T1 = a.getChild(RIGHT);
+    Tree T2 = b.getChild(RIGHT);
+    Tree T3 = c.getChild(RIGHT);
+
+    root.setData(b.getData(), false);
+    b.setData(cdata, false);
+    c = b;
+    b = root;
+
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+    a.addChild(T0, false);
+    a.addChild(T1, false);
+    b.addChild(a, false);
+    b.addChild(c, false);
+    c.addChild(T2, false);
+    c.addChild(T3);
   }
   
   private void leftRotation(Tree root) {
     Tree a = root;
     Tree b = a.getChild(RIGHT);
     Tree c = b.getChild(RIGHT);
+
+    Tree T0 = a.getChild(LEFT);
+    Tree T1 = b.getChild(LEFT);
+    Tree T2 = c.getChild(LEFT);
+    Tree T3 = c.getChild(RIGHT);
     
-    Tree left = new Tree(a.getData(), Arrays.asList(new Tree[]{a.getChild(LEFT), b.getChild(LEFT)}));
-    Tree right = c;
-    root.setData(b.getData());
-    root.removeChildren();
-    root.addChild(left);
-    root.addChild(right);
+    String adata = a.getData();
+    root.setData(b.getData(), false);
+    a = b;
+    b = root;
+
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+
+    b.addChild(a, false);
+    b.addChild(c, false);
+    a.addChild(T0, false);
+    a.addChild(T1, false);
+    c.addChild(T2, false);
+    c.addChild(T3);
   }
   
   private void leftRight(Tree root){
     Tree c = root;
     Tree a = c.getChild(LEFT);
-    Tree b = c.getChild(RIGHT);
+    Tree b = a.getChild(RIGHT);
     
-    Tree left = new Tree(a.getData(), Arrays.asList(new Tree[]{a.getChild(LEFT), b.getChild(LEFT)}));
-    Tree right = new Tree(c.getData(), Arrays.asList(new Tree[]{b.getChild(RIGHT), c.getChild(RIGHT)}));
-    root.setData(b.getData());
-    root.removeChildren();
-    root.addChild(left);
-    root.addChild(right);
+    Tree T0 = a.getChild(LEFT);
+    Tree T1 = b.getChild(LEFT);
+    Tree T2 = b.getChild(RIGHT);
+    Tree T3 = c.getChild(RIGHT);
+    
+    String cdata = c.getData();
+    root.setData(b.getData(), false);
+    c = b;
+    b = root;
+    
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+
+    b.addChild(a, false);
+    b.addChild(c, false);
+    a.addChild(T0, false);
+    a.addChild(T1, false);
+    c.addChild(T2, false);
+    c.addChild(T3);
   }
   
   private void rightLeft(Tree root){
     Tree a = root;
     Tree c = a.getChild(RIGHT);
     Tree b = c.getChild(LEFT);
+
+    Tree T0 = a.getChild(LEFT);
+    Tree T1 = b.getChild(LEFT);
+    Tree T2 = b.getChild(RIGHT);
+    Tree T3 = c.getChild(RIGHT);
     
-    Tree left = new Tree(a.getData(), Arrays.asList(new Tree[]{a.getChild(LEFT), b.getChild(LEFT)}));
-    Tree right = new Tree(c.getData(), Arrays.asList(new Tree[]{b.getChild(RIGHT), c.getChild(RIGHT)}));
-    root.setData(b.getData());
-    root.removeChildren();
-    root.addChild(left);
-    root.addChild(right);
+    String cdata = c.getData();
+    root.setData(b.getData(), false);
+    c = b;
+    b = root;
+    
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+
+    b.addChild(a, false);
+    b.addChild(c, false);
+    a.addChild(T0, false);
+    a.addChild(T1, false);
+    c.addChild(T2, false);
+    c.addChild(T3);
   }
   
   private int balanceRatio(Tree t){
