@@ -101,7 +101,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             }
 
             t = curr_layer.remove();
-	    t.addTreeChangeListener(this);
+            t.addTreeChangeListener(this);
             Node n = new Node(t, xpos, (layer+1)*50, cachedGraphics);
             xpos += n.width + PADDING;
 
