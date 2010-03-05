@@ -9,26 +9,20 @@ public class Tree {
     
     Vector<TreeChangeListener> listeners = new Vector<TreeChangeListener>();
 
-    public Tree(String data, Iterable<Tree> kids) 
+    public Tree() {}
+    public Tree(Object data, Iterable<Tree> kids) 
     {
-        FIREAWAY = false;
-        setData(data);
+        setData(data, false);
         if (kids != null) 
             for (Tree kid : kids) {
                 //Avoid setting off the listeners
-                addChild(kid);
+                addChild(kid, false);
             }
-        FIREAWAY = true;
     }
-    public Tree(String data) { this(data, null); }
     public Tree(Iterable<Tree> kids) { this(null, kids); }
     public Tree(Object o) {
-        FIREAWAY = false;
-        setData(o);
-        FIREAWAY = true;
+        this(o, null);
     }
-
-    public Tree(){ }
 
     @Override
     public String toString()
@@ -57,9 +51,8 @@ public class Tree {
         return data;
     }
 
-    public boolean FIREAWAY = true;
-
-    protected void setData(Object o)
+    protected void setData(Object o) { setData(o, true); }
+    protected void setData(Object o, boolean fire)
     {
         if (o != null) {
             this.data = o.toString();
@@ -67,8 +60,7 @@ public class Tree {
             this.data = "";
         }
 
-        if (FIREAWAY)
-            fireDataChangedEvent();
+        if (fire) fireDataChangedEvent();
     }
 
     public String getTreeName()
@@ -100,7 +92,8 @@ public class Tree {
       return children.get(i);
     }
 
-    public void addChild(Tree child)
+    public void addChild(Tree child) { addChild(child, true); }
+    public void addChild(Tree child, boolean fire)
     {
         synchronized (children) {
             children.add(child);
@@ -111,25 +104,28 @@ public class Tree {
                 child.addTreeChangeListener(l);
             }
         }
-        if (FIREAWAY) fireTreeAddedEvent(child);
+        if (fire) fireTreeAddedEvent(child);
     }
 
-    public void removeChildren(){
-        children.clear();
-        if (FIREAWAY) fireChildrenClearedEvent();
+    public void removeChildren(){ removeChildren(true); }
+    public void removeChildren(boolean fire){
+        synchronized (children) { children.clear(); }
+        if (fire) fireChildrenClearedEvent();
     }
 
     public int depth()
     {
         int depth = 1;
         if (children != null) {
-            for (Tree kid : children) {
-                if (kid == this){
-                  continue;
-                }
-                int kd = kid.depth();
-                if (1 + kd > depth) {
-                    depth = 1 + kd;
+            synchronized (children) {
+                for (Tree kid : children) {
+                    if (kid == this){
+                      continue;
+                    }
+                    int kd = kid.depth();
+                    if (1 + kd > depth) {
+                        depth = 1 + kd;
+                    }
                 }
             }
         }

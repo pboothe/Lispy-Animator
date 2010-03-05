@@ -7,18 +7,16 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-import jscheme.*;
-
-public class MainWindow extends JFrame {
+public class TreeAutomaton extends JFrame {
 
   private TreeDisplay treeDisplay = new TreeDisplay();
   JSplitPane maininput, output;
   JTextArea outputtext = new JTextArea(){{setEditable(false);}};
   private BottomInput bottomInput = new BottomInput();
 
-  public MainWindow()
+  public TreeAutomaton()
   {
-    super("Lispy Animator");
+    super("Tree Automaton");
 
     maininput = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
     output =  new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -31,72 +29,57 @@ public class MainWindow extends JFrame {
     maininput.add(new JScrollPane(bottomInput));
 
     bottomInput.setPlayButtonAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){ step(); }
+        public void actionPerformed(ActionEvent e){ step(); }
+    });
+
+    bottomInput.setPlayAllButtonAction(new ActionListener(){
+        public void actionPerformed(ActionEvent e){ 
+            new Thread() {
+                public void run() { while (step()) { 
+                        try { Thread.sleep(500); } 
+                        catch (InterruptedException ie) {}
+                    } 
+                }
+            }.start();
+        }
     });
 
     bottomInput.setChangeAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){ 
-          outputtext.setText(bottomInput.getText().replace('\n', ' '));
-          startLayout(); 
-      }
+        public void actionPerformed(ActionEvent e){ automaton = null; step(); }
     });
 
     pack();
   }
 
-  synchronized private void startLayout()
+  Automaton automaton;
+  private boolean step()
   {
-      String code = outputtext.getText();
-      int i = code.lastIndexOf("\n");
-      code = code.substring(i+1);
-      Object lisp =  new InputPort(new StringReader(code)).read();
-      
-      if (lisp == InputPort.EOF) {
-        treeDisplay.setMessage("Problem with: " + code);
-        System.out.println("Problem with: " + code);
-      }else{
-        treeDisplay.setTree(fromLisp(lisp));
-        System.out.println(lisp.toString());
+    if (automaton == null) {
+      outputtext.setText("");
+
+      String code = bottomInput.getText();
+      code = code.replace("\n", " ");
+      try {
+          automaton = Automaton.parse(code);
+          treeDisplay.setTree(automaton);
+          outputtext.setText(automaton.lispy());
+      } catch (CompilationException ce) {
+        automaton = null;
       }
-  }
-
-  private static Tree fromLisp(Object lisp)
-  {
-      if (lisp instanceof Pair) {
-          Pair p = (Pair)lisp;
-
-          Tree t = new Tree("", Arrays.asList(new Tree[] { fromLisp(p.first) }));
-          while (p.rest instanceof Pair) {
-              p = (Pair)p.rest;
-              t.addChild(fromLisp(p.first));
-          }
-
-          return t;
-      } else 
-          return new Tree(lisp);
-  }
-
-  private void step()
-  {
-    if (outputtext.getText() == null || outputtext.getText().trim().equals("")) {
-        outputtext.setText(bottomInput.getText().replace('\n', ' '));
+      return true;
+    } else {
+        boolean rv = automaton.step();
+        if (rv) {
+            outputtext.append(automaton.lispy() + "\n");
+        }
+        return rv;
     }
-
-    String code = outputtext.getText();
-    int i = code.lastIndexOf("\n");
-    code = code.substring(i+1);
-    Object lisp =  new InputPort(new StringReader(code)).read();
-    System.out.println("code = \"" + code + "\", lisp=" + lisp);
-    lisp = new Scheme(new String[]{}).step(lisp);
-    outputtext.append("\n" + lisp);
-
-    startLayout();
   }
 
 
   public static void main(String args[])
   {
-    MainWindow m = new MainWindow();
+    TreeAutomaton m = new TreeAutomaton();
     m.setSize(800, 600);
     m.setVisible(true);
     m.setDefaultCloseOperation(EXIT_ON_CLOSE);

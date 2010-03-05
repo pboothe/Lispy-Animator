@@ -14,7 +14,8 @@ import javax.swing.event.DocumentListener;
 public class BottomInput extends JPanel {
 	private static final long serialVersionUID = 1L;
 	JTextArea text;
-	  private JButton run = new JButton(">");
+	  private JButton step = new JButton(">");
+	  private JButton run = new JButton(">>");
 
 	  public BottomInput()
 	  {
@@ -26,8 +27,8 @@ public class BottomInput extends JPanel {
 	            public void changedUpdate(DocumentEvent e) { checkSyntax(); }
 	        });
 	    JPanel buttonPanel = new JPanel();
+	    buttonPanel.add(step);
 	    buttonPanel.add(run);
-	    buttonPanel.add(new JButton(">>"));
 	    add(buttonPanel, BorderLayout.SOUTH);
 	  }
 
@@ -61,6 +62,10 @@ public class BottomInput extends JPanel {
 	  }
 
 	  void setPlayButtonAction(ActionListener actionListener) {
+	    step.addActionListener(actionListener);
+	  }
+
+	  void setPlayAllButtonAction(ActionListener actionListener) {
 	    run.addActionListener(actionListener);
 	  }
 

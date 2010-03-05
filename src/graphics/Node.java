@@ -13,7 +13,7 @@ import java.awt.geom.Rectangle2D;
 import main.Tree;
 
 public class Node {
-    private static final int PADDING = 5;
+    protected static final int PADDING = 5;
     private static final int ROUNDING = 20;
 
     private Color BACKGROUND = Color.WHITE;
@@ -57,8 +57,6 @@ public class Node {
         this.y = y;
         if (g != null) {
             width = getBounds(g).getWidth();
-        } else {
-            System.out.println("NULLLLLL");
         }
     }
 

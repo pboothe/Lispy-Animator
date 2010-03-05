@@ -24,4 +24,8 @@
 	<target name="runbinary" depends="build">
 		<java classname="main.BinaryTreeInsertion" classpath="build/" fork="true" />
 	</target>
+
+	<target name="runautomaton" depends="build">
+		<java classname="main.TreeAutomaton" classpath="build/" fork="true" />
+	</target>
 </project>
