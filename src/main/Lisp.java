@@ -4,7 +4,9 @@ import java.util.*;
 
 
 public class Lisp {
-  String reservedwords[] = { "+", "-", "*", "/", "<", ">", "if", "fun" };
+  private static final String FUN = "fun";
+  private static final String IF = "if";
+  String reservedwords[] = { "+", "-", "*", "/", "<", ">", "=", IF, FUN};
 
   Tree root = new Tree();
   public Lisp(String code) throws CompilationException
@@ -107,19 +109,19 @@ public class Lisp {
 
         kids.remove(0);
         String word = first.getData();
-        if (word.equals("fun")) {
-            // (fun name arg1 arg2 [...] body) ; note that args are optional
+        if (word.equals(FUN)) {
+            // (FUN (arg1 arg2 [...]) body) ; note that args are optional
             if (kids.size() <= 1) 
                 throw new CompilationException(code);
             if (kids.get(1).getChildren() == null)
                 throw new CompilationException(code);
 
-            return new Tree("fun", kids);
-        } else if (word.equals("if")) {
+            return new Tree(FUN, kids);
+        } else if (word.equals(IF)) {
             // (if cond then else)
             if (kids.size() != 3) 
                 throw new CompilationException(code);
-            return new Tree("if", kids);
+            return new Tree(IF, kids);
         } else {
             return new Tree(word, kids);
         }
@@ -128,6 +130,182 @@ public class Lisp {
     }
   }
 
+  private static void replace(Tree code, String data, Tree replacement)
+  {
+      System.out.println("Trying to replace" + data + " with " + replacement + " in " + code);
+      if (code.getData().equals(data)) {
+          System.out.println("Replacing " + data + " with " + replacement);
+          code.removeChildren(false);
+          for (Tree t : replacement.getChildren()) {
+              code.addChild(new Tree(t), false);
+          }
+          code.setData(replacement.getData());
+      } else if (code.getData().equals(FUN)) {
+          //Shadowing
+          Vector<Tree> fn = code.getChildren();
+          Vector<Tree> args = fn.get(0).getChildren();
+
+          for (Tree t : args) {
+              if (t.getData().equals(data)) {
+                  return;
+              }
+          }
+
+          // If we made it here, the replacement term is not in the args
+          replace(fn.get(1), data, replacement);
+      } else {
+          for (Tree t : code.getChildren()) {
+              replace(t, data, replacement);
+          }
+      }
+  }
+
+  public boolean step() { return step(root); }
+  private boolean step(Tree code) {
+    if (code.getData().equals(FUN)) return false;
+
+    if (code.getData().equals("") && code.getChildren().size() >= 1 && code.getChild(0).getData().equals(FUN)) { 
+        // This is an APPLY -- make sure it works.
+        Tree fn = code.getChild(0);
+        Vector<Tree> fnargs = fn.getChildren();
+        Tree body = fnargs.get(1);
+        fnargs = fnargs.get(0).getChildren();
+
+        Vector<Tree> inargs = code.getChildren();
+        inargs.remove(0);
+        for (Tree t : inargs) {
+            if (step(t)) return true;
+        }
+
+        if (fnargs.size() != inargs.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < fnargs.size(); i++) {
+            replace(body, fnargs.get(i).getData(), inargs.get(i));
+        }
+
+        code.removeChildren(false);
+        for (Tree t : body.getChildren()) {
+            code.addChild(t, false);
+        }
+        code.setData(body.getData());
+        
+        return true;
+    } else if (code.getData().equals(IF)) {
+        // IF
+        Vector<Tree> ifargs = code.getChildren();
+        if (step(ifargs.get(0))) return true;
+
+        if (ifargs.get(0).getData().equals("0")) { // "0" is our only false value
+            System.out.println("FALSE IF");
+            code.removeChildren(false);
+
+            for (Tree kkid : ifargs.get(2).getChildren() ) {
+                code.addChild(kkid, false);
+            }
+
+            code.setData(ifargs.get(2).getData());
+        } else {
+            System.out.println("TRUE IF: " + ifargs.get(0));
+            code.removeChildren(false);
+
+            for (Tree kkid : ifargs.get(1).getChildren() ) {
+                code.addChild(kkid, false);
+            }
+
+            code.setData(ifargs.get(1).getData());
+        }
+        return true;
+    }
+
+    for (Tree kid : code.getChildren()) {
+        if (step(kid)) { 
+            System.out.println("stepped " + kid);
+            return true; 
+        }
+    }
+
+    if (code.getData().equals("<")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        if (left < right) {
+            code.setData("1");
+        } else {
+            code.setData("0");
+        }
+
+        return true;
+    } else if (code.getData().equals(">")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        if (left > right) {
+            code.setData("1");
+        } else {
+            code.setData("0");
+        }
+
+        return true;
+    } else if (code.getData().equals("=")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        if (left.equals(right)) {
+            code.setData("1");
+        } else {
+            code.setData("0");
+        }
+
+        return true;
+    } else if (code.getData().equals("+")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        code.setData("" + (left + right));
+
+        return true;
+    } else if (code.getData().equals("-")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        code.setData("" + (left - right));
+
+        return true;
+    } else if (code.getData().equals("*")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        code.setData("" + (left * right));
+
+        return true;
+    } else if (code.getData().equals("/")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Integer left = Integer.parseInt(ltargs.get(0).getData());
+        Integer right = Integer.parseInt(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        code.setData(""  +(left / right));
+
+        return true;
+    }
+
+    System.out.println("Couldn't step: " + code.getData());
+    return false;
+  }
 
   public String toString()
   {

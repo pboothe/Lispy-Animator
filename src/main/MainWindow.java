@@ -7,8 +7,6 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-import jscheme.*;
-
 public class MainWindow extends JFrame {
 
   private TreeDisplay treeDisplay = new TreeDisplay();
@@ -34,6 +32,20 @@ public class MainWindow extends JFrame {
       public void actionPerformed(ActionEvent e){ step(); }
     });
 
+    bottomInput.setPlayAllButtonAction(new ActionListener(){
+      public void actionPerformed(ActionEvent e){ 
+        new Thread() {
+            public void run() {
+                while (step()) {
+                  try {
+                    Thread.sleep(1000);
+                  } catch (InterruptedException ie) {}
+                }
+            }  
+        }.start();
+      }
+    });
+
     bottomInput.setChangeAction(new ActionListener(){
       public void actionPerformed(ActionEvent e){ 
           outputtext.setText(bottomInput.getText().replace('\n', ' '));
@@ -44,53 +56,29 @@ public class MainWindow extends JFrame {
     pack();
   }
 
+  Lisp lisp = null;
   synchronized private void startLayout()
   {
-      String code = outputtext.getText();
-      int i = code.lastIndexOf("\n");
-      code = code.substring(i+1);
-      Object lisp =  new InputPort(new StringReader(code)).read();
-      
-      if (lisp == InputPort.EOF) {
+      String code = bottomInput.getText().trim();
+      try {
+          lisp = new Lisp(code);
+          treeDisplay.setTree(lisp.root);
+          System.out.println(lisp.toString());
+      } catch (CompilationException ce) {
         treeDisplay.setMessage("Problem with: " + code);
         System.out.println("Problem with: " + code);
-      }else{
-        treeDisplay.setTree(fromLisp(lisp));
-        System.out.println(lisp.toString());
       }
   }
 
-  private static Tree fromLisp(Object lisp)
-  {
-      if (lisp instanceof Pair) {
-          Pair p = (Pair)lisp;
-
-          Tree t = new Tree("", Arrays.asList(new Tree[] { fromLisp(p.first) }));
-          while (p.rest instanceof Pair) {
-              p = (Pair)p.rest;
-              t.addChild(fromLisp(p.first));
-          }
-
-          return t;
-      } else 
-          return new Tree(lisp);
-  }
-
-  private void step()
+  private boolean step()
   {
     if (outputtext.getText() == null || outputtext.getText().trim().equals("")) {
-        outputtext.setText(bottomInput.getText().replace('\n', ' '));
+        startLayout();
     }
 
-    String code = outputtext.getText();
-    int i = code.lastIndexOf("\n");
-    code = code.substring(i+1);
-    Object lisp =  new InputPort(new StringReader(code)).read();
-    System.out.println("code = \"" + code + "\", lisp=" + lisp);
-    lisp = new Scheme(new String[]{}).step(lisp);
+    boolean rv = lisp.step();
     outputtext.append("\n" + lisp);
-
-    startLayout();
+    return rv;
   }
 
 

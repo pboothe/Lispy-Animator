@@ -21,6 +21,14 @@ public class Tree {
             }
     }
     public Tree(Iterable<Tree> kids) { this(null, kids); }
+    public Tree(Tree copy)
+    {
+        setData(copy.getData(), false);
+        for (Tree t : copy.getChildren()) {
+            addChild(new Tree(t), false);
+        }
+    }
+
     public Tree(Object o) {
         this(o, null);
     }
