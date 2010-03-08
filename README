@@ -1,4 +1,8 @@
-All of my old animation code has been included in the OldCode directory.  Use
-it in health if you find it useful, but feel free to ignore it, too.
+This is a library which lays out trees and can animate changes from tree to
+tree.  It can handle it if you make things not a tree, but be sure not to use
+any functions which only make sense in a tree context, such as depth().  
 
-Good luck.
+We have three sample visualizations, and you can see any of them by simply
+downloading the .jar file in this directory and double-clicking it.  To
+download it, click the file name, and then click "View Raw" at the bottom of
+the page.
