@@ -141,6 +141,13 @@ public class Tree {
         synchronized (children) { 
             for (Tree t : children) t.parent = null;
             children.clear(); 
+
+            depthcache = -1;
+            Tree t = parent;
+            while (t != null && t.depthcache != -1) {
+                t.depthcache = -1;
+                t = t.parent;
+            }
         }
 
         if (fire) fireChildrenClearedEvent();
