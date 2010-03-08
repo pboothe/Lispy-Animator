@@ -36,6 +36,7 @@ public class BinaryTreeInsertion extends LispFreeWindow{
   
   private void insertNumber(int num, Tree t){
         
+    System.out.println("adding num: " + num + " to " + t);
     if (t.getData() == null || t.getData().isEmpty()){
       t.setData(num, false);
       t.addChild(new Tree("", null), false);
@@ -132,6 +133,7 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     
     String cdata = c.getData();
     root.setData(b.getData(), false);
+    b.setData(cdata, false);
     c = b;
     b = root;
     
@@ -157,9 +159,10 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     Tree T2 = b.getChild(RIGHT);
     Tree T3 = c.getChild(RIGHT);
     
-    String cdata = c.getData();
+    String adata = a.getData();
     root.setData(b.getData(), false);
-    c = b;
+    b.setData(adata, false);
+    a = b;
     b = root;
     
     a.removeChildren(false);

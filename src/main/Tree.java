@@ -160,14 +160,19 @@ public class Tree {
     }
 
     public void addTreeChangeListener(TreeChangeListener listener){
+        addTreeChangeListener(listener, new HashSet<Tree>());
+    }
+
+    public void addTreeChangeListener(TreeChangeListener listener, Set<Tree> heard){
         synchronized (listeners) {
             listeners.add(listener);
         }
 
         synchronized (children) {
             for (Tree kid : children) {
-                if (kid == null) continue;
-                kid.addTreeChangeListener(listener);
+                if (kid == null || heard.contains(kid)) continue;
+                heard.add(kid);
+                kid.addTreeChangeListener(listener, heard);
             }
         }
     }
