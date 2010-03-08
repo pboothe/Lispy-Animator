@@ -12,6 +12,10 @@
 	</target>
 
 	<target name="run" depends="build">
+		<java classname="main.DemoMenu" classpath="build/" fork="true" />
+	</target>
+
+	<target name="runlisp" depends="build">
 		<java classname="main.MainWindow" classpath="build/" fork="true" />
 	</target>
 
