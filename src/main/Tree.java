@@ -1,7 +1,6 @@
 package main;
 
 import java.util.*;
-import jscheme.*;
 
 public class Tree {
     protected Tree parent = null;
