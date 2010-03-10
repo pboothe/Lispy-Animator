@@ -39,6 +39,10 @@
 		<java classname="main.TreeAutomaton" classpath="build/" fork="true" />
 	</target>
 
+	<target name="runrand" depends="build">
+		<java classname="main.RandomTree" classpath="build/" fork="true" />
+	</target>
+
 	<target name="jar" depends="build">
 		<jar jarfile="Lispy-Animator.jar">
 			<fileset dir="build/" />	

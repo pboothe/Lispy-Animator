@@ -121,7 +121,6 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     @Override
     public void paint(Graphics g)
     {
-        synchronized (this) {
             Graphics2D g2 = graphicsPrep(g);
             if (message != null){
                 g.drawString(message, 0, getHeight()/2);
@@ -129,6 +128,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             } 
 
             if (treechanged) {
+                System.out.println("TREE CHANGED");
                 treechanged = false;
                 layout(tree, 0, PADDING);
             }
@@ -148,7 +148,6 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
 
 
             g2.dispose();
-        }
     }
 
     public double adjust()
@@ -254,6 +253,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     	animations.offer(new Animation() {
                     void animate()
                     {
+                        System.out.println("Animating: " + superTree);
                         // Make the new layout
                         TreeDisplay td = new TreeDisplay(false);
                         td.cachedGraphics = cachedGraphics;
@@ -328,6 +328,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                         }
                         
                         repaint();
+                        System.out.println("Done animating: " + superTree);
                     }
                 });
     }

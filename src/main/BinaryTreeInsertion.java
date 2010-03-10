@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -13,6 +15,12 @@ public class BinaryTreeInsertion extends LispFreeWindow{
   
   public BinaryTreeInsertion(){
     super("Binary Tree Insertion");
+
+    bottomInput.setPlayAllButtonAction(new ActionListener() {
+            public void actionPerformed(ActionEvent e){ 
+                treeDisplay.setTree(tree = getStartingTree());
+            }
+        });
   }
   
   protected Tree getStartingTree(){
@@ -23,14 +31,19 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     if (bottomInput.getText().isEmpty() == false){
       System.out.println(bottomInput.getText());
       String[] numbers = bottomInput.getText().split(",");
-      for(String num : numbers){
-        try{
-          insertNumber(Integer.parseInt(num.trim()), tree);
-        }catch(NumberFormatException nfe){
+      try{
+          for(String num : numbers){
+              insertNumber(Integer.parseInt(num.trim()), tree);
+                
+              //try { Thread.sleep(2000); } catch (InterruptedException ie) {}
+          }
+
+          tree.setData(tree.getData());
+
+          bottomInput.text.setText("");
+      }catch(NumberFormatException nfe){
           JOptionPane.showMessageDialog(this, "Please enter a list of comma seperated numbers");
-        }
       }
-      bottomInput.text.setText("");
     }
   }
   
@@ -43,10 +56,14 @@ public class BinaryTreeInsertion extends LispFreeWindow{
       t.addChild(new Tree("", null));
     }else if ( num  < Integer.parseInt(t.getData())){
       insertNumber(num, t.getChild(LEFT));
+      System.out.println("About to rebalance " + t);
       rebalance(t);
+      System.out.println("done rebalancing " + t);
     }else{
       insertNumber(num, t.getChild(RIGHT));
+      System.out.println("About to rebalance " + t);
       rebalance(t);
+      System.out.println("done rebalancing " + t);
     }
   }
   
@@ -70,7 +87,6 @@ public class BinaryTreeInsertion extends LispFreeWindow{
 
   private void rightRotation(Tree root){
     Tree c = root;
-    String cdata = c.getData();
     Tree b = c.getChild(LEFT);
     Tree a = b.getChild(LEFT);
     Tree T0 = a.getChild(LEFT);
@@ -78,20 +94,22 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     Tree T2 = b.getChild(RIGHT);
     Tree T3 = c.getChild(RIGHT);
 
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+
+    String cdata = c.getData();
     root.setData(b.getData(), false);
     b.setData(cdata, false);
     c = b;
     b = root;
 
-    a.removeChildren(false);
-    b.removeChildren(false);
-    c.removeChildren(false);
     a.addChild(T0, false);
     a.addChild(T1, false);
     b.addChild(a, false);
     b.addChild(c, false);
     c.addChild(T2, false);
-    c.addChild(T3);
+    c.addChild(T3, false);
   }
   
   private void leftRotation(Tree root) {
@@ -104,21 +122,21 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     Tree T2 = c.getChild(LEFT);
     Tree T3 = c.getChild(RIGHT);
     
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+
     String adata = a.getData();
     root.setData(b.getData(), false);
     a = b;
     b = root;
-
-    a.removeChildren(false);
-    b.removeChildren(false);
-    c.removeChildren(false);
 
     b.addChild(a, false);
     b.addChild(c, false);
     a.addChild(T0, false);
     a.addChild(T1, false);
     c.addChild(T2, false);
-    c.addChild(T3);
+    c.addChild(T3, false);
   }
   
   private void leftRight(Tree root){
@@ -131,22 +149,22 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     Tree T2 = b.getChild(RIGHT);
     Tree T3 = c.getChild(RIGHT);
     
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+    
     String cdata = c.getData();
     root.setData(b.getData(), false);
     b.setData(cdata, false);
     c = b;
     b = root;
-    
-    a.removeChildren(false);
-    b.removeChildren(false);
-    c.removeChildren(false);
 
     b.addChild(a, false);
     b.addChild(c, false);
     a.addChild(T0, false);
     a.addChild(T1, false);
     c.addChild(T2, false);
-    c.addChild(T3);
+    c.addChild(T3, false);
   }
   
   private void rightLeft(Tree root){
@@ -159,22 +177,22 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     Tree T2 = b.getChild(RIGHT);
     Tree T3 = c.getChild(RIGHT);
     
+    a.removeChildren(false);
+    b.removeChildren(false);
+    c.removeChildren(false);
+    
     String adata = a.getData();
     root.setData(b.getData(), false);
     b.setData(adata, false);
     a = b;
     b = root;
-    
-    a.removeChildren(false);
-    b.removeChildren(false);
-    c.removeChildren(false);
 
     b.addChild(a, false);
     b.addChild(c, false);
     a.addChild(T0, false);
     a.addChild(T1, false);
     c.addChild(T2, false);
-    c.addChild(T3);
+    c.addChild(T3, false);
   }
   
   private int balanceRatio(Tree t){

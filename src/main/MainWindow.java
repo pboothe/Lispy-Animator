@@ -38,7 +38,7 @@ public class MainWindow extends JFrame {
             public void run() {
                 while (step()) {
                   try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                   } catch (InterruptedException ie) {}
                 }
             }  
