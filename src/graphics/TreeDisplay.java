@@ -72,7 +72,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                     try {
                         Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
                         while (a != null) {
-                            System.out.println("About to animate " + a);
+                            //System.out.println("About to animate " + a);
                             a.animate();
                             a = animations.poll(1, TimeUnit.MICROSECONDS);
                         }
@@ -133,7 +133,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             } 
 
             if (treechanged) {
-                System.out.println("TREE CHANGED");
+                //System.out.println("TREE CHANGED");
                 treechanged = false;
                 layout(tree, 0, PADDING);
             }
@@ -258,7 +258,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     	animations.offer(new Animation() {
                     void animate()
                     {
-                        System.out.println("Animating: " + superTree);
+                        //System.out.println("Animating: " + superTree);
                         // Make the new layout
                         TreeDisplay td = new TreeDisplay(false);
                         td.cachedGraphics = cachedGraphics;
@@ -333,7 +333,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                         }
                         
                         repaint();
-                        System.out.println("Done animating: " + superTree);
+                        //System.out.println("Done animating: " + superTree);
                     }
 
                     public String toString() { return "animation of " + superTree; }
@@ -347,17 +347,17 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     	animations.offer(new Animation() {
                     void animate()
                     {
-                        System.out.println("About to notify");
+                        //System.out.println("About to notify");
                         s.release();
-                        System.out.println("Notified");
+                        //System.out.println("Notified");
                     }
 
                     public String toString() { return "wakeup call"; }
                 });
         try {
-            System.out.println("Waiting for notification");
+            //System.out.println("Waiting for notification");
             s.release();
-            System.out.println("Notified");
+            //System.out.println("Notified");
             s.acquire();
         } catch (InterruptedException ie) {}
     }

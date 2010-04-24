@@ -124,7 +124,7 @@ public class Tree {
         }
 
         synchronized (listeners) {
-            for (TreeChangeListener l : listeners) {
+            for (TreeChangeListener l : new Vector<TreeChangeListener>(listeners)) {
                 child.addTreeChangeListener(l);
             }
         }
@@ -175,7 +175,7 @@ public class Tree {
     }
 
     public void addTreeChangeListener(TreeChangeListener listener, Set<Tree> heard){
-        listeners.add(listener);
+        synchronized (listener) { listeners.add(listener); }
 
         for (Tree kid : new Vector<Tree>(children)) {
             if (kid == null || heard.contains(kid)) continue;
@@ -185,7 +185,7 @@ public class Tree {
     }
 
     public void removeTreeChangeListener(TreeChangeListener listener){
-        listeners.remove(listener);
+        synchronized (listener) { listeners.remove(listener); }
 
         for (Tree kid : new Vector<Tree>(children)) {
             kid.addTreeChangeListener(listener);
@@ -194,7 +194,7 @@ public class Tree {
 
     private void fireTreeAddedEvent(Tree child){
         synchronized (listeners) {
-            for (TreeChangeListener nodeChangeListener : listeners) {
+            for (TreeChangeListener nodeChangeListener : new Vector<TreeChangeListener>(listeners)) {
                 nodeChangeListener.kidAdded(this, child);
             }
         }
@@ -202,7 +202,7 @@ public class Tree {
 
     private void fireChildrenClearedEvent(){
         synchronized (listeners) {
-            for (TreeChangeListener nodeChangeListener : listeners) {
+            for (TreeChangeListener nodeChangeListener : new Vector<TreeChangeListener>(listeners)) {
                 nodeChangeListener.childrenRemoved(this);
             }
         }

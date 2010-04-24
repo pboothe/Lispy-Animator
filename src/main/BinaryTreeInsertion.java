@@ -72,14 +72,18 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     System.out.println("Bal = " + balance);
     if (balance == -2){ //Right side is too heavy
       if(balanceRatio(root.getChild(RIGHT)) == -1){
+        System.out.println("leftRotation");
         leftRotation(root);
       }else{
+        System.out.println("rightLeft");
         rightLeft(root);
       }
     }else if (balance == 2){
       if (balanceRatio(root.getChild(LEFT)) == 1){
+        System.out.println("rightRotation");
         rightRotation(root);
       }else{
+        System.out.println("leftRight");
         leftRight(root);
       }
     }
@@ -127,7 +131,8 @@ public class BinaryTreeInsertion extends LispFreeWindow{
     c.removeChildren(false);
 
     String adata = a.getData();
-    root.setData(b.getData(), false);
+    a.setData(b.getData(), false);
+    b.setData(adata);
     a = b;
     b = root;
 
