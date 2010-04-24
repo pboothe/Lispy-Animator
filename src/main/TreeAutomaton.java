@@ -103,7 +103,16 @@ public class TreeAutomaton extends JFrame {
             } catch (IOException ioe){
                 System.err.println("Error reading: " + args[i]);
             }
-       }
+       } 
+    }
+    if (args.length == 0) {
+        m.bottomInput.text.append(
+                    "(and (not (and (not (or (or 1 1) (not 1))) (or (and (not 1) (and 0\n"
+                    + "0)) (or (or 1 1) (or 1 0))))) (not (and (and (or (not 1) (and 0 1))\n"
+                    + "(and (or 0 0) (or 1 1))) (or (or (and 1 0) (and 0 1)) (or (and 1\n"
+                    + "1) (or 0 0))))))"
+                );
+
     }
   }
 }

@@ -103,8 +103,10 @@ public class Tree {
     public void setChild(int position, Tree child){
         children.set(position, child);
       
-        for (TreeChangeListener l : listeners) {
-            child.addTreeChangeListener(l);
+        synchronized (listeners) {
+            for (TreeChangeListener l : listeners) {
+                child.addTreeChangeListener(l);
+            }
         }
     }
     
@@ -218,7 +220,12 @@ public class Tree {
 
     private void waitForAnimations()
     {
-        for (TreeChangeListener nodeChangeListener : new Vector<TreeChangeListener>(listeners)) {
+        Vector<TreeChangeListener> l;
+        synchronized (listeners) {
+            l = new Vector<TreeChangeListener>(listeners);
+        }
+
+        for (TreeChangeListener nodeChangeListener : l) {
             nodeChangeListener.waitForAnimations();
         }
     }
