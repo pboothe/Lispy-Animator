@@ -59,6 +59,8 @@ public class TreeAutomaton extends JFrame {
 
       String code = bottomInput.getText();
       code = code.replace("\n", " ");
+      code = code.replace("  ", " ");
+      code = code.trim();
       try {
           automaton = Automaton.parse(code);
           treeDisplay.setTree(automaton);

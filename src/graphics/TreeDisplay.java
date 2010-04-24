@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JComponent;
@@ -70,7 +71,11 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
 
                     try {
                         Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
-                        if (a != null) a.animate();
+                        while (a != null) {
+                            System.out.println("About to animate " + a);
+                            a.animate();
+                            a = animations.poll(1, TimeUnit.MICROSECONDS);
+                        }
                     } catch (InterruptedException e) {}
                 }
             }
@@ -330,6 +335,30 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                         repaint();
                         System.out.println("Done animating: " + superTree);
                     }
+
+                    public String toString() { return "animation of " + superTree; }
                 });
+    }
+
+    public void waitForAnimations()
+    {
+        final Semaphore s = new Semaphore(1);
+        try { s.acquire(); } catch (InterruptedException ie) {}
+    	animations.offer(new Animation() {
+                    void animate()
+                    {
+                        System.out.println("About to notify");
+                        s.release();
+                        System.out.println("Notified");
+                    }
+
+                    public String toString() { return "wakeup call"; }
+                });
+        try {
+            System.out.println("Waiting for notification");
+            s.release();
+            System.out.println("Notified");
+            s.acquire();
+        } catch (InterruptedException ie) {}
     }
 }

@@ -38,7 +38,7 @@ public class MainWindow extends JFrame {
             public void run() {
                 while (step()) {
                   try {
-                    Thread.sleep(2000);
+                    Thread.sleep(200);
                   } catch (InterruptedException ie) {}
                 }
             }  
@@ -76,7 +76,9 @@ public class MainWindow extends JFrame {
         startLayout();
     }
 
+    System.out.println("About to step the lisp");
     boolean rv = lisp.step();
+    System.out.println("done with step the lisp");
     outputtext.append("\n" + lisp);
     return rv;
   }

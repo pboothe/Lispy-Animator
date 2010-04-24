@@ -29,45 +29,33 @@ public class Automaton extends Tree {
         if (kids.size() == 0) {
             if (getTreeName().equals("1")) {
                 setData("q1"); return true;
-            } 
-            if (getTreeName().equals("0")) {
+            } else if (getTreeName().equals("0")) {
                 setData("q0"); return true;
-            } 
-
-            if (getTreeName().equals("q1")) {
+            } else if (getTreeName().equals("q1")) {
                 setData("ACCEPT");
                 return true;
             }
-        }
-
-        if (kids.size() == 1) {
+        } else if (kids.size() == 1) {
             String k = kids.get(0).getTreeName();
             if (!k.equals("q1") && !k.equals("q0"))
                 return kids.get(0).step();
-
-            if (getTreeName().equals("not")) {
+            else if (getTreeName().equals("not")) {
                 removeChildren(false);
                 setData(k.equals("q1") ? "q0" : "q1");
                 return true;
             }
-        }
-
-        if (kids.size() == 2) {
+        } else if (kids.size() == 2) {
             String l = kids.get(0).getTreeName();
             String r = kids.get(1).getTreeName();
             if (!l.equals("q1") && !l.equals("q0")) 
                 return kids.get(0).step();
-
-            if (!r.equals("q1") && !r.equals("q0")) 
+            else if (!r.equals("q1") && !r.equals("q0")) 
                 return kids.get(1).step();
-
-            if (getTreeName().equals("and")) {
+            else if (getTreeName().equals("and")) {
                 removeChildren(false);
                 setData((l.equals("q1") && r.equals("q1")) ? "q1" : "q0");
                 return true;
-            }
-
-            if (getTreeName().equals("or")) {
+            } else if (getTreeName().equals("or")) {
                 removeChildren(false);
                 setData((l.equals("q1") || r.equals("q1")) ? "q1" : "q0");
                 return true;
