@@ -28,36 +28,36 @@ public class Automaton extends Tree {
         // Leaf case
         if (kids.size() == 0) {
             if (getTreeName().equals("1")) {
-                setData("q1"); return true;
+                setData("true"); return true;
             } else if (getTreeName().equals("0")) {
-                setData("q0"); return true;
-            } else if (getTreeName().equals("q1")) {
+                setData("false"); return true;
+            } else if (getTreeName().equals("true")) {
                 setData("ACCEPT");
                 return true;
             }
         } else if (kids.size() == 1) {
             String k = kids.get(0).getTreeName();
-            if (!k.equals("q1") && !k.equals("q0"))
+            if (!k.equals("true") && !k.equals("false"))
                 return kids.get(0).step();
             else if (getTreeName().equals("not")) {
                 removeChildren(false);
-                setData(k.equals("q1") ? "q0" : "q1");
+                setData(k.equals("true") ? "false" : "true");
                 return true;
             }
         } else if (kids.size() == 2) {
             String l = kids.get(0).getTreeName();
             String r = kids.get(1).getTreeName();
-            if (!l.equals("q1") && !l.equals("q0")) 
+            if (!l.equals("true") && !l.equals("false")) 
                 return kids.get(0).step();
-            else if (!r.equals("q1") && !r.equals("q0")) 
+            else if (!r.equals("true") && !r.equals("false")) 
                 return kids.get(1).step();
             else if (getTreeName().equals("and")) {
                 removeChildren(false);
-                setData((l.equals("q1") && r.equals("q1")) ? "q1" : "q0");
+                setData((l.equals("true") && r.equals("true")) ? "true" : "false");
                 return true;
             } else if (getTreeName().equals("or")) {
                 removeChildren(false);
-                setData((l.equals("q1") || r.equals("q1")) ? "q1" : "q0");
+                setData((l.equals("true") || r.equals("true")) ? "true" : "false");
                 return true;
             }
         }
