@@ -7,16 +7,16 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-public class MainWindow extends JFrame {
+public class TreeAutomaton extends JFrame {
 
   private TreeDisplay treeDisplay = new TreeDisplay();
   JSplitPane maininput, output;
   JTextArea outputtext = new JTextArea(){{setEditable(false);}};
   private BottomInput bottomInput = new BottomInput();
 
-  public MainWindow()
+  public TreeAutomaton()
   {
-    super("Lispy Animator");
+    super("Tree Automaton");
 
     maininput = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
     output =  new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -29,64 +29,59 @@ public class MainWindow extends JFrame {
     maininput.add(new JScrollPane(bottomInput));
 
     bottomInput.setPlayButtonAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){ step(); }
+        public void actionPerformed(ActionEvent e){ step(); }
     });
 
     bottomInput.setPlayAllButtonAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){ 
-        new Thread() {
-            public void run() {
-                while (step()) {
-                  try {
-                    Thread.sleep(200);
-                  } catch (InterruptedException ie) {}
+        public void actionPerformed(ActionEvent e){ 
+            new Thread() {
+                public void run() { while (step()) { 
+                        try { Thread.sleep(500); } 
+                        catch (InterruptedException ie) {}
+                    } 
                 }
-            }  
-        }.start();
-      }
+            }.start();
+        }
     });
 
     bottomInput.setChangeAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){ 
-          outputtext.setText(bottomInput.getText().replace('\n', ' '));
-          startLayout(); 
-      }
+        public void actionPerformed(ActionEvent e){ automaton = null; step(); }
     });
 
     pack();
   }
 
-  Lisp lisp = null;
-  synchronized private void startLayout()
-  {
-      String code = bottomInput.getText().trim();
-      try {
-          lisp = new Lisp(code);
-          treeDisplay.setTree(lisp.root);
-          System.out.println(lisp.toString());
-      } catch (CompilationException ce) {
-        treeDisplay.setMessage("Problem with: " + code);
-        System.out.println("Problem with: " + code);
-      }
-  }
-
+  Automaton automaton;
   private boolean step()
   {
-    if (outputtext.getText() == null || outputtext.getText().trim().equals("")) {
-        startLayout();
-    }
+    if (automaton == null) {
+      outputtext.setText("");
 
-    System.out.println("About to step the lisp");
-    boolean rv = lisp.step();
-    System.out.println("done with step the lisp");
-    outputtext.append("\n" + lisp);
-    return rv;
+      String code = bottomInput.getText();
+      code = code.replace("\n", " ");
+      code = code.replace("  ", " ");
+      code = code.trim();
+      try {
+          automaton = Automaton.parse(code);
+          treeDisplay.setTree(automaton);
+          outputtext.setText(automaton.lispy());
+      } catch (CompilationException ce) {
+        automaton = null;
+      }
+      return true;
+    } else {
+        boolean rv = automaton.step();
+        if (rv) {
+            outputtext.append(automaton.lispy() + "\n");
+        }
+        return rv;
+    }
   }
 
 
   public static void main(String args[])
   {
-    MainWindow m = new MainWindow();
+    TreeAutomaton m = new TreeAutomaton();
     m.setSize(800, 600);
     m.setVisible(true);
     m.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -108,7 +103,16 @@ public class MainWindow extends JFrame {
             } catch (IOException ioe){
                 System.err.println("Error reading: " + args[i]);
             }
-       }
+       } 
+    }
+    if (args.length == 0) {
+        m.bottomInput.text.append(
+                    "(and (not (and (not (or (or 1 1) (not 1))) (or (and (not 1) (and 0\n"
+                    + "0)) (or (or 1 1) (or 1 0))))) (not (and (and (or (not 1) (and 0 1))\n"
+                    + "(and (or 0 0) (or 1 1))) (or (or (and 1 0) (and 0 1)) (or (and 1\n"
+                    + "1) (or 0 0))))))"
+                );
+
     }
   }
 }

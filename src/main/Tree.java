@@ -1,34 +1,36 @@
 package main;
 
 import java.util.*;
-import jscheme.*;
 
 public class Tree {
+    protected Tree parent = null;
     private String data = null;
     private Vector<Tree> children = new Vector<Tree>();
     
-    Vector<TreeChangeListener> listeners = new Vector<TreeChangeListener>();
+    Set<TreeChangeListener> listeners = new HashSet<TreeChangeListener>();
 
-    public Tree(String data, Iterable<Tree> kids) 
+    public Tree() {}
+    public Tree(Object data, Iterable<Tree> kids) 
     {
-        FIREAWAY = false;
-        setData(data);
+        setData(data, false);
         if (kids != null) 
             for (Tree kid : kids) {
                 //Avoid setting off the listeners
-                addChild(kid);
+                addChild(kid, false);
             }
-        FIREAWAY = true;
     }
-    public Tree(String data) { this(data, null); }
     public Tree(Iterable<Tree> kids) { this(null, kids); }
-    public Tree(Object o) {
-        FIREAWAY = false;
-        setData(o);
-        FIREAWAY = true;
+    public Tree(Tree copy)
+    {
+        setData(copy.getData(), false);
+        for (Tree t : new Vector<Tree>(copy.getChildren())) {
+            addChild(new Tree(t), false);
+        }
     }
 
-    public Tree(){ }
+    public Tree(Object o) {
+        this(o, null);
+    }
 
     @Override
     public String toString()
@@ -57,9 +59,8 @@ public class Tree {
         return data;
     }
 
-    public boolean FIREAWAY = true;
-
-    protected void setData(Object o)
+    protected void setData(Object o) { setData(o, true); }
+    protected void setData(Object o, boolean fire)
     {
         if (o != null) {
             this.data = o.toString();
@@ -67,8 +68,7 @@ public class Tree {
             this.data = "";
         }
 
-        if (FIREAWAY)
-            fireDataChangedEvent();
+        if (fire) { fireDataChangedEvent(); waitForAnimations(); }
     }
 
     public String getTreeName()
@@ -101,40 +101,61 @@ public class Tree {
     }
     
     public void setChild(int position, Tree child){
-      synchronized(child){
         children.set(position, child);
-      }
       
-      synchronized (listeners) {
-        for (TreeChangeListener l : listeners) {
-            child.addTreeChangeListener(l);
-        }
-      }
-    }
-    
-
-    public void addChild(Tree child)
-    {
-        synchronized (children) {
-            children.add(child);
-        }
-
         synchronized (listeners) {
             for (TreeChangeListener l : listeners) {
                 child.addTreeChangeListener(l);
             }
         }
-        if (FIREAWAY) fireTreeAddedEvent(child);
+    }
+    
+
+    public void addChild(Tree child) { addChild(child, true); }
+    public void addChild(Tree child, boolean fire)
+    {
+        synchronized (children) {
+            child.parent = this;
+            children.add(child);
+            depthcache = -1;
+            Tree t = parent;
+            while (t != null && t.depthcache != -1) {
+                t.depthcache = -1;
+                t = t.parent;
+            }
+        }
+
+        synchronized (listeners) {
+            for (TreeChangeListener l : new Vector<TreeChangeListener>(listeners)) {
+                child.addTreeChangeListener(l);
+            }
+        }
+
+        if (fire) { fireTreeAddedEvent(child); waitForAnimations(); }
     }
 
-    public void removeChildren(){
-        children.clear();
-        if (FIREAWAY) fireChildrenClearedEvent();
+    public void removeChildren(){ removeChildren(true); }
+    public void removeChildren(boolean fire){
+        synchronized (children) { 
+            for (Tree t : children) t.parent = null;
+            children.clear(); 
+
+            depthcache = -1;
+            Tree t = parent;
+            while (t != null && t.depthcache != -1) {
+                t.depthcache = -1;
+                t = t.parent;
+            }
+        }
+
+        if (fire) { fireChildrenClearedEvent(); waitForAnimations(); }
     }
 
+    int depthcache = -1;
     public int depth()
     {
         synchronized(children){
+          if (depthcache != -1) return depthcache;
           int depth = 1;
           if (children != null) {
               for (Tree kid : children) {
@@ -147,38 +168,35 @@ public class Tree {
                   }
               }
           }
-          return depth;
+          return depthcache = depth;
         }
     }
 
     public void addTreeChangeListener(TreeChangeListener listener){
-        synchronized (listeners) {
-            listeners.add(listener);
-        }
+        addTreeChangeListener(listener, new HashSet<Tree>());
+    }
 
-        synchronized (children) {
-            for (Tree kid : children) {
-                if (kid == null) continue;
-                kid.addTreeChangeListener(listener);
-            }
+    public void addTreeChangeListener(TreeChangeListener listener, Set<Tree> heard){
+        synchronized (listener) { listeners.add(listener); }
+
+        for (Tree kid : new Vector<Tree>(children)) {
+            if (kid == null || heard.contains(kid)) continue;
+            heard.add(kid);
+            kid.addTreeChangeListener(listener, heard);
         }
     }
 
     public void removeTreeChangeListener(TreeChangeListener listener){
-        synchronized (listeners) {
-            listeners.remove(listener);
-        }
+        synchronized (listener) { listeners.remove(listener); }
 
-        synchronized (children) {
-            for (Tree kid : children) {
-                kid.addTreeChangeListener(listener);
-            }
+        for (Tree kid : new Vector<Tree>(children)) {
+            kid.addTreeChangeListener(listener);
         }
     }
 
     private void fireTreeAddedEvent(Tree child){
         synchronized (listeners) {
-            for (TreeChangeListener nodeChangeListener : listeners) {
+            for (TreeChangeListener nodeChangeListener : new Vector<TreeChangeListener>(listeners)) {
                 nodeChangeListener.kidAdded(this, child);
             }
         }
@@ -186,7 +204,7 @@ public class Tree {
 
     private void fireChildrenClearedEvent(){
         synchronized (listeners) {
-            for (TreeChangeListener nodeChangeListener : listeners) {
+            for (TreeChangeListener nodeChangeListener : new Vector<TreeChangeListener>(listeners)) {
                 nodeChangeListener.childrenRemoved(this);
             }
         }
@@ -194,9 +212,21 @@ public class Tree {
 
     private void fireDataChangedEvent() {
         synchronized (listeners) {
-            for (TreeChangeListener nodeChangeListener : listeners) {
+            for (TreeChangeListener nodeChangeListener : new Vector<TreeChangeListener>(listeners)) {
                 nodeChangeListener.dataChanged(this);
             }
+        }
+    }
+
+    private void waitForAnimations()
+    {
+        Vector<TreeChangeListener> l;
+        synchronized (listeners) {
+            l = new Vector<TreeChangeListener>(listeners);
+        }
+
+        for (TreeChangeListener nodeChangeListener : l) {
+            nodeChangeListener.waitForAnimations();
         }
     }
     

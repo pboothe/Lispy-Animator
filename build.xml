@@ -12,6 +12,10 @@
 	</target>
 
 	<target name="run" depends="build">
+		<java classname="main.DemoMenu" classpath="build/" fork="true" />
+	</target>
+
+	<target name="runlisp" depends="build">
 		<java classname="main.MainWindow" classpath="build/" fork="true" />
 	</target>
 
@@ -21,7 +25,31 @@
                 </java>
 	</target>
 
+	<target name="runfact" depends="build">
+                <java classname="main.MainWindow" classpath="build/" fork="true">
+                    <arg value="lisp/fact.lisp" />
+                </java>
+	</target>
+
 	<target name="runbinary" depends="build">
 		<java classname="main.BinaryTreeInsertion" classpath="build/" fork="true" />
+	</target>
+
+	<target name="runautomaton" depends="build">
+		<java classname="main.TreeAutomaton" classpath="build/" fork="true" />
+	</target>
+
+	<target name="runrand" depends="build">
+		<java classname="main.RandomTree" classpath="build/" fork="true" />
+	</target>
+
+	<target name="jar" depends="build">
+		<jar jarfile="Lispy-Animator.jar">
+			<fileset dir="build/" />	
+			<manifest>
+				<attribute name="Main-Class" value="main.DemoMenu"/>
+			</manifest>
+		</jar>
+
 	</target>
 </project>

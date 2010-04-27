@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JComponent;
@@ -70,7 +71,11 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
 
                     try {
                         Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
-                        if (a != null) a.animate();
+                        while (a != null) {
+                            //System.out.println("About to animate " + a);
+                            a.animate();
+                            a = animations.poll(1, TimeUnit.MICROSECONDS);
+                        }
                     } catch (InterruptedException e) {}
                 }
             }
@@ -101,6 +106,8 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             }
 
             t = curr_layer.remove();
+            if (t == null) continue;
+
             t.addTreeChangeListener(this);
             Node n = new Node(t, xpos, (layer+1)*50, cachedGraphics);
             xpos += n.width + PADDING;
@@ -119,7 +126,6 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     @Override
     public void paint(Graphics g)
     {
-        synchronized (this) {
             Graphics2D g2 = graphicsPrep(g);
             if (message != null){
                 g.drawString(message, 0, getHeight()/2);
@@ -127,6 +133,7 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             } 
 
             if (treechanged) {
+                //System.out.println("TREE CHANGED");
                 treechanged = false;
                 layout(tree, 0, PADDING);
             }
@@ -146,7 +153,6 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
 
 
             g2.dispose();
-        }
     }
 
     public double adjust()
@@ -196,9 +202,20 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             }
 
             for (Node n : positions.values()) {
-                n.vx = n.vx*.9 + 100*n.fx;
+                n.vx = n.vx*.7 + 100*n.fx;
                 n.x += .01*n.vx;
                 total += Math.abs(100*n.fx);
+            }
+
+            // Now correct the layers
+            for (Vector<Node> layer : layers) {
+                for (int i = 1; i < layer.size(); i++) {
+                    Node l = layer.get(i-1);
+                    Node n = layer.get(i);
+                    if (n.x - n.width/2 < l.x + l.width/2 + PADDING) {
+                        n.x = n.width/2 + l.x + l.width/2 + PADDING;
+                    }
+                }
             }
 
             return total;
@@ -241,12 +258,15 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
     	animations.offer(new Animation() {
                     void animate()
                     {
+                        //System.out.println("Animating: " + superTree);
                         // Make the new layout
                         TreeDisplay td = new TreeDisplay(false);
                         td.cachedGraphics = cachedGraphics;
                         td.setTree(superTree);
                         td.layout(superTree, 0, PADDING);
-                        while (td.adjust() > 10) ;
+                        
+                        for(int i = 0; i < 1000; i++)
+                            if (td.adjust() < 10) break;
                        
                         // Fade out all of the removed nodes
                         LinkedList<Tree> removal = new LinkedList<Tree>();
@@ -313,8 +333,32 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                         }
                         
                         repaint();
-                        System.out.println("Done animating");
+                        //System.out.println("Done animating: " + superTree);
                     }
+
+                    public String toString() { return "animation of " + superTree; }
                 });
+    }
+
+    public void waitForAnimations()
+    {
+        final Semaphore s = new Semaphore(1);
+        try { s.acquire(); } catch (InterruptedException ie) {}
+    	animations.offer(new Animation() {
+                    void animate()
+                    {
+                        //System.out.println("About to notify");
+                        s.release();
+                        //System.out.println("Notified");
+                    }
+
+                    public String toString() { return "wakeup call"; }
+                });
+        try {
+            //System.out.println("Waiting for notification");
+            s.release();
+            //System.out.println("Notified");
+            s.acquire();
+        } catch (InterruptedException ie) {}
     }
 }

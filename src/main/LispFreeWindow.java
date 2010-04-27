@@ -39,7 +39,9 @@ public class LispFreeWindow extends JFrame {
     maininput.add(new JScrollPane(bottomInput));
 
     bottomInput.setPlayButtonAction(new ActionListener(){
-      public void actionPerformed(ActionEvent e){ step(); }
+      public void actionPerformed(ActionEvent e){ 
+        new Thread() { public void run () { step(); } }.start();
+      }
     });
 
     bottomInput.setChangeAction(new ActionListener(){
