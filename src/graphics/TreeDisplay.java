@@ -3,7 +3,11 @@ package graphics;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.RenderedImage;
 import java.awt.RenderingHints;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -15,76 +19,70 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JComponent;
+import javax.imageio.*;
 
 import main.Tree;
 import main.TreeChangeListener;
 
-public class TreeDisplay extends JComponent implements TreeChangeListener{
+public class TreeDisplay extends JComponent implements TreeChangeListener {
 
     private static final Color BACKGROUND = Color.decode("0xAAffff");
     private static final int PADDING = 20;
-
     protected Map<Tree, Node> positions;
     protected Vector<Vector<Node>> layers;
-
     //This is probably over kill, Dr, Boothe gets to decide.
     private BlockingQueue<Animation> animations = new LinkedBlockingQueue<Animation>();
-
     private Tree tree;
     private String message = "Enter some code to run!";
     private boolean treechanged = false;
     private boolean laidout = false;
 
-    public TreeDisplay(boolean shouldgo) 
-    {
-    	super();
-    	if (shouldgo) start();
+    public TreeDisplay(boolean shouldgo) {
+        super();
+        if (shouldgo) {
+            start();
+        }
     }
-    
-    public TreeDisplay()
-    {
+
+    public TreeDisplay() {
         this(true);
     }
 
-    public void setTree(Tree tree)
-    {
+    public void setTree(Tree tree) {
         this.tree = tree;
         treechanged = true;
         message = null;
         laidout = false;
     }
 
-    public void setMessage(String message) 
-    {
+    public void setMessage(String message) {
         this.message = message;
     }
 
-    public void start()
-    {
+    public void start() {
         new Thread() {
-            public void run()
-            {
+            @Override
+            public void run() {
                 while (true) {
                     adjust();
                     repaint();
-                    try { Thread.sleep(1); } catch (InterruptedException ie) {}
 
                     try {
                         Animation a = animations.poll(1, TimeUnit.MICROSECONDS);
                         while (a != null) {
-                            //System.out.println("About to animate " + a);
+                            System.out.println("About to animate " + a);
                             a.animate();
                             a = animations.poll(1, TimeUnit.MICROSECONDS);
                         }
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) {
+                    }
                 }
             }
         }.start();
     }
 
-    protected void layout(Tree t, double x, double y) 
-    {
-        positions = new HashMap<Tree,Node>();
+    protected void layout(Tree t, double x, double y) {
+        positions = new HashMap<Tree, Node>();
         layers = new Vector<Vector<Node>>();
         layers.add(new Vector<Node>());
 
@@ -106,10 +104,12 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             }
 
             t = curr_layer.remove();
-            if (t == null) continue;
+            if (t == null) {
+                continue;
+            }
 
             t.addTreeChangeListener(this);
-            Node n = new Node(t, xpos, (layer+1)*50, cachedGraphics);
+            Node n = new Node(t, xpos, (layer + 1) * 50, cachedGraphics);
             xpos += n.width + PADDING;
 
             layers.get(layer).add(n);
@@ -123,47 +123,68 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
         laidout = true;
     }
 
+    /* // HACK FOR IMAGES
+    int name = 1;
     @Override
     public void paint(Graphics g)
     {
-            Graphics2D g2 = graphicsPrep(g);
-            if (message != null){
-                g.drawString(message, 0, getHeight()/2);
-                return;
-            } 
+        System.out.println("UPDATE");
+        Image os = createImage(getWidth(), getHeight());
+        paint2(os.getGraphics());
+        g.drawImage(os,0,0,this);
 
-            if (treechanged) {
-                //System.out.println("TREE CHANGED");
-                treechanged = false;
-                layout(tree, 0, PADDING);
-            }
+        try {
+            if (name++ % 50 == 0)
+                ImageIO.write((RenderedImage)os, "png", new File("ss" + name + ".png"));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }*/
 
-            for (Node n : positions.values()) {
-                for (Tree kid : n.data.getChildren()) {
-                    Node knode = positions.get(kid);
-                    if (knode == null) continue;
-                    
-                    knode.drawLine(n, knode, g2);
+    @Override
+    public void paint(Graphics g) {
+        Graphics2D g2 = graphicsPrep(g);
+        if (message != null) {
+            g.drawString(message, 0, getHeight() / 2);
+            return;
+        }
+
+        if (treechanged) {
+            //System.out.println("TREE CHANGED");
+            treechanged = false;
+            layout(tree, 0, PADDING);
+        }
+
+        for (Node n : positions.values()) {
+            for (Tree kid : n.data.getChildren()) {
+                Node knode = positions.get(kid);
+                if (knode == null) {
+                    continue;
                 }
+
+                knode.drawLine(n, knode, g2);
             }
+        }
 
-            for (Node n : positions.values()) {
-                n.draw(g2);
-            }
+        for (Node n : positions.values()) {
+            n.draw(g2);
+        }
 
 
-            g2.dispose();
+        g2.dispose();
     }
 
-    public double adjust()
-    {
+    public double adjust() {
         synchronized (this) {
-            if (!laidout) return -1;
+            if (!laidout) {
+                return -1;
+            }
 
             double total = 0;
 
-            for (Node n : positions.values())
+            for (Node n : positions.values()) {
                 n.fx = 0;
+            }
 
             // Magnets
             for (int i = 1; i < layers.size(); i++) {
@@ -172,16 +193,16 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
                 for (int j = 0; j < layer.size(); j++) {
                     if (j > 0) {
                         Node r = layer.get(j);
-                        Node l = layer.get(j-1);
-                        double d = (l.x + l.width/2) - (r.x - r.width/2);
-                        layer.get(j).fx += 1000.0 / (d*d);
+                        Node l = layer.get(j - 1);
+                        double d = (l.x + l.width / 2) - (r.x - r.width / 2);
+                        layer.get(j).fx += 1000.0 / (d * d);
                     }
 
-                    if (j < layer.size()-1) {
+                    if (j < layer.size() - 1) {
                         Node l = layer.get(j);
-                        Node r = layer.get(j+1);
-                        double d = (l.x + l.width/2) - (r.x - r.width/2);
-                        layer.get(j).fx -= 1000.0 / (d*d);
+                        Node r = layer.get(j + 1);
+                        double d = (l.x + l.width / 2) - (r.x - r.width / 2);
+                        layer.get(j).fx -= 1000.0 / (d * d);
                     }
                 }
             }
@@ -190,7 +211,9 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             for (Node n : positions.values()) {
                 for (Tree kidt : n.data.getChildren()) {
                     Node kid = positions.get(kidt);
-                    if (kid == null) continue;
+                    if (kid == null) {
+                        continue;
+                    }
                     // F = -k*d
                     double dx = n.x - kid.x;
                     double dy = n.y - kid.y;
@@ -202,18 +225,18 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             }
 
             for (Node n : positions.values()) {
-                n.vx = n.vx*.7 + 100*n.fx;
-                n.x += .01*n.vx;
-                total += Math.abs(100*n.fx);
+                n.vx = n.vx * .7 + 100 * n.fx;
+                n.x += .01 * n.vx;
+                total += Math.abs(100 * n.fx);
             }
 
             // Now correct the layers
             for (Vector<Node> layer : layers) {
                 for (int i = 1; i < layer.size(); i++) {
-                    Node l = layer.get(i-1);
+                    Node l = layer.get(i - 1);
                     Node n = layer.get(i);
-                    if (n.x - n.width/2 < l.x + l.width/2 + PADDING) {
-                        n.x = n.width/2 + l.x + l.width/2 + PADDING;
+                    if (n.x - n.width / 2 < l.x + l.width / 2 + PADDING) {
+                        n.x = n.width / 2 + l.x + l.width / 2 + PADDING;
                     }
                 }
             }
@@ -221,13 +244,11 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
             return total;
         }
     }
-
     Graphics cachedGraphics;
 
-    private Graphics2D graphicsPrep(Graphics g1)
-    {
+    private Graphics2D graphicsPrep(Graphics g1) {
         cachedGraphics = g1;
-        Graphics2D g = (Graphics2D)g1;
+        Graphics2D g = (Graphics2D) g1;
         int depth = tree != null ? tree.depth() : 1;
 
         double totalpixels = depth * 50 + 40;
@@ -235,130 +256,159 @@ public class TreeDisplay extends JComponent implements TreeChangeListener{
         double scale = available / totalpixels;
 
         g.scale(scale, scale);
-        g.translate(getWidth()/2/scale,0);
+        g.translate(getWidth() / 2 / scale, 0);
 
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         return g;
     }
 
     /**
      * ADD YOUR ANIMATION ADDING TO QUEUE CODE HERE!!!
      */
-    public void kidAdded(final Tree parent, final Tree addedNode){
+    public void kidAdded(final Tree parent, final Tree addedNode) {
         dataChanged(parent);
     }
 
-    public void childrenRemoved(final Tree parent){
+    public void childrenRemoved(final Tree parent) {
         dataChanged(parent);
     }
 
-    public void dataChanged(final Tree parent){
-    	final Tree superTree = tree;
+    public void dataChanged(final Tree parent) {
+        final Tree superTree = tree;
 
-    	animations.offer(new Animation() {
-                    void animate()
-                    {
-                        //System.out.println("Animating: " + superTree);
-                        // Make the new layout
-                        TreeDisplay td = new TreeDisplay(false);
-                        td.cachedGraphics = cachedGraphics;
-                        td.setTree(superTree);
-                        td.layout(superTree, 0, PADDING);
-                        
-                        for(int i = 0; i < 1000; i++)
-                            if (td.adjust() < 10) break;
-                       
-                        // Fade out all of the removed nodes
-                        LinkedList<Tree> removal = new LinkedList<Tree>();
-                        for (Tree t : positions.keySet()) {
-                            if (!td.positions.containsKey(t))
-                                removal.add(t);
-                        }
+        animations.offer(new Animation() {
+            void animate() {
+                //System.out.println("Animating: " + superTree);
+                // Make the new layout
+                TreeDisplay td = new TreeDisplay(false);
+                td.cachedGraphics = cachedGraphics;
+                td.setTree(superTree);
+                td.layout(superTree, 0, PADDING);
 
-                        if (removal.size() > 0) {
-                            for (int i = 0; i < 10; i++) {
-                                for (Tree t : removal) {
-                                    positions.get(t).setOpacity(1 - i*.1);
-                                }
-                                repaint();
-                                try { Thread.sleep(10); } catch (InterruptedException ie) {}
-                            }
-                        }
+                for (int i = 0; i < 1000; i++) {
+                    if (td.adjust() < 10) {
+                        break;
+                    }
+                }
 
-                        // Move stuff from start to end
-                        Map<Tree,Node> starts = new HashMap<Tree,Node>();
-                        for (Tree t : positions.keySet()) {
-                        	Node n = positions.get(t);
-                        	starts.put(t, new Node(n.data, n.x, n.y, cachedGraphics));
-                        }
-                        
-                        
-                        for (int i = 0; i < 20; i++) {
-                        	for (Tree t : positions.keySet()) {
-                        		if (starts.get(t) == null) continue;
-                        		if (td.positions.get(t) == null) continue;
-                        		if (positions.get(t) == null) continue;
-                        		
-                        		positions.get(t).x = (td.positions.get(t).x - starts.get(t).x) * i / 20.0 + starts.get(t).x;
-                        	}
-                        	repaint();
-                        	try { Thread.sleep(10); } catch (InterruptedException ie) {}
-                        }
-                     
-                        //Fade in the new stuff
-                        LinkedList<Tree> added = new LinkedList<Tree>();
-                        for (Tree t : td.positions.keySet()) {
-                            if (!positions.containsKey(t))
-                                added.add(t);
-                        }
+                // Fade out all of the removed nodes
+                LinkedList<Tree> removal = new LinkedList<Tree>();
+                for (Tree t : positions.keySet()) {
+                    if (!td.positions.containsKey(t)) {
+                        removal.add(t);
+                    }
+                }
 
-                        if (added.size() > 0) {
-                            for (Tree t : added) {
-                                td.positions.get(t).setOpacity(0);
-                            }
+                if (removal.size() > 0) {
+                    for (int i = 0; i < 10; i++) {
+                        for (Tree t : removal) {
+                            positions.get(t).setOpacity(1 - i * .1);
                         }
-                        
-                        positions = td.positions;
-                        layers = td.layers;
-                        
-                        if (added.size() > 0) {
-                        	for (int i = 1; i <= 10; i++) {
-                        		for (Tree t : added) {
-                        			positions.get(t).setOpacity(i*.1);
-                        		}
-                        	
-                        		repaint();
-                        		try { Thread.sleep(10); } catch (InterruptedException ie) {}
-                        	}
-                        }
-                        
                         repaint();
-                        //System.out.println("Done animating: " + superTree);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException ie) {
+                        }
                     }
+                }
 
-                    public String toString() { return "animation of " + superTree; }
-                });
+                // Move stuff from start to end
+                Map<Tree, Node> starts = new HashMap<Tree, Node>();
+                for (Tree t : positions.keySet()) {
+                    Node n = positions.get(t);
+                    starts.put(t, new Node(n.data, n.x, n.y, cachedGraphics));
+                }
+
+
+                for (int i = 0; i < 20; i++) {
+                    for (Tree t : positions.keySet()) {
+                        if (starts.get(t) == null) {
+                            continue;
+                        }
+                        if (td.positions.get(t) == null) {
+                            continue;
+                        }
+                        if (positions.get(t) == null) {
+                            continue;
+                        }
+
+                        positions.get(t).x = (td.positions.get(t).x - starts.get(t).x) * i / 20.0 + starts.get(t).x;
+                    }
+                    repaint();
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+
+                //Fade in the new stuff
+                LinkedList<Tree> added = new LinkedList<Tree>();
+                for (Tree t : td.positions.keySet()) {
+                    if (!positions.containsKey(t)) {
+                        added.add(t);
+                    }
+                }
+
+                if (added.size() > 0) {
+                    for (Tree t : added) {
+                        td.positions.get(t).setOpacity(0);
+                    }
+                }
+
+                positions = td.positions;
+                layers = td.layers;
+
+                if (added.size() > 0) {
+                    for (int i = 1; i <= 10; i++) {
+                        for (Tree t : added) {
+                            positions.get(t).setOpacity(i * .1);
+                        }
+
+                        repaint();
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException ie) {
+                        }
+                    }
+                }
+
+                repaint();
+                System.out.println("Done animating: " + superTree);
+            }
+
+            @Override
+            public String toString() {
+                return "animation of " + superTree;
+            }
+        });
     }
 
-    public void waitForAnimations()
-    {
+    public void waitForAnimations() {
         final Semaphore s = new Semaphore(1);
-        try { s.acquire(); } catch (InterruptedException ie) {}
-    	animations.offer(new Animation() {
-                    void animate()
-                    {
-                        //System.out.println("About to notify");
-                        s.release();
-                        //System.out.println("Notified");
-                    }
-
-                    public String toString() { return "wakeup call"; }
-                });
         try {
-            //System.out.println("Waiting for notification");
-            s.release();
-            //System.out.println("Notified");
             s.acquire();
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
+
+        animations.offer(new Animation() {
+
+            void animate() {
+                System.out.println("About to notify");
+                s.release();
+                System.out.println("Notified");
+            }
+
+            @Override
+            public String toString() {
+                return "wakeup call";
+            }
+        });
+
+        try {
+            s.release();
+            System.out.println("Waiting for notification");
+            s.acquire();
+        } catch (InterruptedException ie) {
+        }
     }
 }

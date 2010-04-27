@@ -1,7 +1,7 @@
 from random import choice, randint
 def rb(): return choice([True, False])
 
-def rand(depth=6, t=True):
+def rand(depth=4, t=True):
     if depth == 0:
         if t:
             return "1"
