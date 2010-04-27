@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="3240"
@@ -14,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="board.svg">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -52,6 +53,216 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2964"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3043-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3114"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3185"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3256"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3327"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3398"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3469"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3540"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3611"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3682"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3753"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3824"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3931"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4002"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4073"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4144"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4215"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4286"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4357"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4446"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4517"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4588"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4659"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4730"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4801"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4872"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4982"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective5053"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective5106"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -60,20 +271,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748737"
-     inkscape:cx="2008.7866"
-     inkscape:cy="2006.7789"
-     inkscape:document-units="ft"
+     inkscape:zoom="0.12374369"
+     inkscape:cx="704.41061"
+     inkscape:cy="1978.2513"
+     inkscape:document-units="in"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="ft"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1438"
-     inkscape:window-height="854"
-     inkscape:window-x="1440"
+     inkscape:window-height="880"
+     inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:snap-grids="true" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -82,7 +294,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -95,80 +307,80 @@
        xml:space="preserve"
        id="flowRoot2816"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       transform="translate(0,-3267.675)"><flowRegion
+       transform="translate(5.7142858,-3356.2464)"><flowRegion
          id="flowRegion2818"><rect
            id="rect2820"
            width="3006.2139"
            height="581.84784"
            x="96.974648"
            y="117.76542" /></flowRegion><flowPara
-         id="flowPara2824"
-         style="text-anchor:middle;text-align:center;fill:#008000">Drawing Trees</flowPara><flowPara
-         id="flowPara2828"
-         style="text-anchor:middle;text-align:center;fill:#008000">&amp; </flowPara><flowPara
          id="flowPara2830"
-         style="text-align:center;text-anchor:middle;fill:#008000">Animating Tree Changes   </flowPara></flowRoot>    <text
+         style="text-align:center;text-anchor:middle;fill:#008000">Drawing Trees &amp; Animating Tree Changes   </flowPara></flowRoot>    <text
        xml:space="preserve"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="226.27417"
-       y="-2374.1125"
+       x="260.55988"
+       y="-2836.9697"
        id="text2838"><tspan
          sodipodi:role="line"
          id="tspan2840"
-         x="226.27417"
-         y="-2374.1125">Sandro Badame</tspan></text>
+         x="260.55988"
+         y="-2836.9697"
+         style="font-size:100px">Sandro Badame</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="1744.2242"
-       y="-2368.916"
+       x="2069.9385"
+       y="-2848.916"
        id="text2838-7"><tspan
          sodipodi:role="line"
          id="tspan2840-8"
-         x="1744.2242"
-         y="-2368.916">Peter Boothe</tspan></text>
+         x="2069.9385"
+         y="-2848.916"
+         style="font-size:100px">Peter Boothe</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:67.2966156px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="436.60974"
-       y="-1643.1707"
+       style="font-size:75.02003479px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="366.1936"
+       y="-2250.8281"
        id="text2867"
-       transform="scale(0.73097817,1.3680299)"><tspan
+       transform="scale(0.81487021,1.2271893)"><tspan
          sodipodi:role="line"
          id="tspan2869"
-         x="436.60974"
-         y="-1643.1707">&lt;sbadame.student@manhattan.edu&gt;</tspan></text>
+         x="366.1936"
+         y="-2250.8281"
+         style="font-size:44.59067154px">&lt;sbadame.student@manhattan.edu&gt;</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:70.39495087px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="2314.0337"
-       y="-1728.2737"
+       style="font-size:76.66495514px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="2511.7632"
+       y="-2303.3364"
        id="text2867-6"
-       transform="scale(0.76463238,1.307818)"><tspan
+       transform="scale(0.83273744,1.2008587)"><tspan
          sodipodi:role="line"
          id="tspan2869-8"
-         x="2314.0337"
-         y="-1728.2737">&lt;peter.boothe@manhattan.edu&gt;</tspan></text>
+         x="2511.7632"
+         y="-2303.3364"
+         style="font-size:43.5627594px">&lt;peter.boothe@manhattan.edu&gt;</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:97.77117157px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="62.2854"
-       y="-1789.8835"
+       x="66.621544"
+       y="-2305.7188"
        id="text2896"
        transform="scale(0.93184444,1.0731405)"><tspan
          sodipodi:role="line"
          id="tspan2898"
-         x="62.2854"
-         y="-1789.8835"> </tspan><tspan
+         x="66.621544"
+         y="-2305.7188"> </tspan><tspan
          sodipodi:role="line"
-         x="62.2854"
-         y="-1667.6696"
+         x="66.621544"
+         y="-2183.5046"
          id="tspan2900">Have many applications</tspan></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot2902"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       transform="translate(-253.99999,-3297.9608)"><flowRegion
+       transform="translate(97.5331,-3843.4432)"><flowRegion
          id="flowRegion2904"><rect
            id="rect2906"
            width="1165.7144"
@@ -176,17 +388,17 @@
            x="314.28571"
            y="1537.1428" /></flowRegion><flowPara
          id="flowPara2908"
-         style="font-size:72px">Lisp</flowPara><flowPara
+         style="font-size:40px">Lisp</flowPara><flowPara
          id="flowPara2910"
-         style="font-size:72px">Data Structures</flowPara><flowPara
+         style="font-size:40px">Data Structures</flowPara><flowPara
          id="flowPara2912"
-         style="font-size:72px">Automata</flowPara><flowPara
+         style="font-size:40px">Automata</flowPara><flowPara
          id="flowPara2914"
-         style="font-size:72px">Algorithms</flowPara></flowRoot>    <flowRoot
+         style="font-size:40px">Algorithms</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot2916"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       transform="translate(-67.303855,-3556.0433)"><flowRegion
+       transform="translate(5.4271287,-4444.9776)"><flowRegion
          id="flowRegion2918"><rect
            id="rect2920"
            width="1422.8572"
@@ -206,63 +418,63 @@
            height="400"
            x="154.28572"
            y="2474.2856" /></flowRegion><flowPara
-         id="flowPara2932"></flowPara></flowRoot>    <text
+         id="flowPara2932" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="2468.5715"
-       y="-1987.675"
+       x="2072.5918"
+       y="-2492.7515"
        id="text2938"><tspan
          sodipodi:role="line"
          id="tspan2940"
-         x="2468.5715"
-         y="-1987.675">To Layout</tspan></text>
+         x="2072.5918"
+         y="-2492.7515">Laying it all out</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:174.76837158px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="2993.7014"
-       y="-1993.188"
+       x="3005.1501"
+       y="-2519.3972"
        id="text2942"
        transform="scale(1.0587818,0.94448166)"><tspan
          sodipodi:role="line"
-         x="2993.7014"
-         y="-1993.188"
-         id="tspan2948"
-         style="font-size:69.03504181px;text-align:end;text-anchor:end">Fix the root (1</tspan><tspan
+         x="3005.1501"
+         y="-2519.3972"
+         style="font-size:69.03504181px;text-align:end;text-anchor:end"
+         id="tspan2974">Fix the root (1</tspan><tspan
          sodipodi:role="line"
-         x="2993.7014"
-         y="-1906.8942"
+         x="3005.1501"
+         y="-2433.1035"
          id="tspan2954"
          style="font-size:69.03504181px;text-align:end;text-anchor:end">For each node of a given level (2</tspan><tspan
          sodipodi:role="line"
-         x="3015.6794"
-         y="-1820.6003"
+         x="3027.1279"
+         y="-2346.8096"
          id="tspan2958"
-         style="font-size:69.03504181px;text-align:end;text-anchor:end">treat every link as a spring </tspan><tspan
+         style="font-size:69.03504181px;text-align:end;text-anchor:end">treat every link as a spring     </tspan><tspan
          sodipodi:role="line"
-         x="2993.7014"
-         y="-1734.3066"
+         x="3027.1282"
+         y="-2260.5159"
          style="font-size:69.03504181px;text-align:end;text-anchor:end"
-         id="tspan3033">and every node as a magnet</tspan><tspan
+         id="tspan3033">and every node as a magnet     </tspan><tspan
          sodipodi:role="line"
-         x="2993.7014"
-         y="-1648.0128"
+         x="3005.1501"
+         y="-2174.2219"
          id="tspan2946"
          style="font-size:69.03504181px;text-align:end;text-anchor:end" /></text>
     <text
        xml:space="preserve"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="2366.9932"
-       y="-978.73468"
+       x="2371.0337"
+       y="-1532.2983"
        id="text2938-8"><tspan
          sodipodi:role="line"
          id="tspan2940-4"
-         x="2366.9932"
-         y="-978.73468">To Animate</tspan></text>
+         x="2371.0337"
+         y="-1532.2983">To Animate</tspan></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot2985"
        style="font-size:70px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       transform="translate(11.428571,-3353.3893)"><flowRegion
+       transform="translate(15.469181,-3906.9529)"><flowRegion
          id="flowRegion2987"><rect
            id="rect2989"
            width="1331.4286"
@@ -289,11 +501,11 @@
            height="308.57144"
            x="1834.2858"
            y="1468.5714" /></flowRegion><flowPara
-         id="flowPara3013"></flowPara></flowRoot>    <flowRoot
+         id="flowPara3013" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot3015"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       transform="translate(-17.142857,-2941.9607)"><flowRegion
+       transform="translate(-29.264688,-3636.9457)"><flowRegion
          id="flowRegion3017"><rect
            id="rect3019"
            width="1811.4286"
@@ -308,23 +520,212 @@
    id="flowSpan3025">4+</flowSpan> example visualizations</flowPara></flowRoot>    <text
        xml:space="preserve"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="62.857132"
-       y="160.89639"
+       x="82.163872"
+       y="-614.08856"
        id="text3027"><tspan
          sodipodi:role="line"
          id="tspan3029"
-         x="62.857132"
-         y="160.89639"
-         style="font-size:90px">Animation sequence</tspan></text>
+         x="82.163872"
+         y="-614.08856"
+         style="font-size:90px">This is the executution of a Tree Automata</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="58.442249"
-       y="-1936.5803"
+       x="62.482861"
+       y="-2490.144"
        id="text2938-3"><tspan
          sodipodi:role="line"
          id="tspan2940-1"
-         x="58.442249"
-         y="-1936.5803">Dynamic Trees</tspan></text>
+         x="62.482861"
+         y="-2490.144">Dynamic Trees</tspan></text>
+    <image
+       y="-531.94525"
+       x="77.32489"
+       id="image2966"
+       height="233.34616"
+       width="505.0506"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss301.png" />
+    <image
+       y="-524.75385"
+       x="601.97845"
+       id="image3045"
+       height="233.41811"
+       width="505.20627"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss351.png" />
+    <image
+       y="-521.00909"
+       x="1133.7261"
+       id="image3116"
+       height="225.9287"
+       width="488.99634"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss401.png" />
+    <image
+       y="-517.2644"
+       x="1650.495"
+       id="image3187"
+       height="225.9287"
+       width="488.99634"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss451.png" />
+    <image
+       y="-513.51971"
+       x="2171.0085"
+       id="image3258"
+       height="216.18773"
+       width="467.91318"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss501.png" />
+    <image
+       y="-251.39055"
+       x="92.698952"
+       id="image3329"
+       height="227.54034"
+       width="492.48456"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss551.png" />
+    <image
+       y="-247.64586"
+       x="620.7019"
+       id="image3400"
+       height="222.18399"
+       width="480.89139"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss601.png" />
+    <image
+       y="-251.39055"
+       x="1144.9602"
+       id="image3471"
+       height="220.61975"
+       width="477.50577"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss651.png" />
+    <image
+       y="-247.64586"
+       x="1654.2397"
+       id="image3542"
+       height="227.94324"
+       width="493.35663"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss701.png" />
+    <image
+       y="-247.64586"
+       x="2182.2427"
+       id="image3613"
+       height="211.96902"
+       width="458.78226"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss751.png" />
+    <image
+       y="18.227993"
+       x="92.698975"
+       id="image3684"
+       height="222.18399"
+       width="480.89139"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss801.png" />
+    <image
+       y="10.738573"
+       x="628.19135"
+       id="image3755"
+       height="222.18399"
+       width="480.89139"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss851.png" />
+    <image
+       y="10.738573"
+       x="1148.705"
+       id="image3826"
+       height="218.43929"
+       width="472.78641"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss901.png" />
+    <image
+       y="21.972672"
+       x="1669.2185"
+       id="image3933"
+       height="215.42931"
+       width="466.27164"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss951.png" />
+    <image
+       y="25.717409"
+       x="2193.4766"
+       id="image4146"
+       height="211.96902"
+       width="458.78226"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1051.png" />
+    <image
+       y="284.10181"
+       x="103.93304"
+       id="image4217"
+       height="210.94987"
+       width="456.57648"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1151.png" />
+    <image
+       y="287.84656"
+       x="628.19135"
+       id="image4288"
+       height="214.6946"
+       width="464.68143"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1201.png" />
+    <image
+       y="291.59125"
+       x="1152.4497"
+       id="image4359"
+       height="210.94987"
+       width="456.57648"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1251.png" />
+    <image
+       y="287.84656"
+       x="1680.4526"
+       id="image4448"
+       height="203.31828"
+       width="440.05875"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1301.png" />
+    <image
+       y="269.12299"
+       x="2189.7319"
+       id="image4519"
+       height="224.08005"
+       width="484.99515"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1401.png" />
+    <image
+       y="531.25214"
+       x="96.443619"
+       id="image4590"
+       height="210.94987"
+       width="456.57648"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1451.png" />
+    <image
+       y="531.25214"
+       x="631.93604"
+       id="image4661"
+       height="213.69916"
+       width="462.52695"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1501.png" />
+    <image
+       y="531.25214"
+       x="1159.939"
+       id="image4803"
+       height="206.77856"
+       width="447.54816"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1551.png" />
+    <image
+       y="531.25214"
+       x="1691.6868"
+       id="image4874"
+       height="196.39769"
+       width="425.07993"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1601.png" />
+    <image
+       y="527.50745"
+       x="2200.9661"
+       id="image4984"
+       height="218.8896"
+       width="473.76108"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1651.png" />
+    <image
+       y="793.05341"
+       x="906.07648"
+       id="image5055"
+       height="193.24849"
+       width="418.26385"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1701.png" />
+    <image
+       y="797.09399"
+       x="1447.5183"
+       id="image5108"
+       height="207.4162"
+       width="448.92822"
+       xlink:href="file:///home/sandro/Documents/homework/Lispy-Animator/board/pics/ss1801.png" />
   </g>
 </svg>
