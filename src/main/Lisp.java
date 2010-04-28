@@ -6,7 +6,7 @@ import java.util.*;
 public class Lisp {
   private static final String FUN = "fun";
   private static final String IF = "if";
-  String reservedwords[] = { "+", "-", "*", "/", "<", ">", "=", IF, FUN};
+  String reservedwords[] = { "+", "-", "*", "/", "<", ">", "=", "^", IF, FUN};
 
   Tree root = new Tree();
   public Lisp(String code) throws CompilationException
@@ -228,8 +228,8 @@ public class Lisp {
 
     if (code.getData().equals("<")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         if (left < right) {
@@ -241,8 +241,8 @@ public class Lisp {
         return true;
     } else if (code.getData().equals(">")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         if (left > right) {
@@ -254,8 +254,8 @@ public class Lisp {
         return true;
     } else if (code.getData().equals("=")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         if (left.equals(right)) {
@@ -267,8 +267,8 @@ public class Lisp {
         return true;
     } else if (code.getData().equals("+")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         code.setData("" + (left + right));
@@ -276,8 +276,8 @@ public class Lisp {
         return true;
     } else if (code.getData().equals("-")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         code.setData("" + (left - right));
@@ -285,8 +285,8 @@ public class Lisp {
         return true;
     } else if (code.getData().equals("*")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         code.setData("" + (left * right));
@@ -294,11 +294,20 @@ public class Lisp {
         return true;
     } else if (code.getData().equals("/")) {
         Vector<Tree> ltargs = code.getChildren();
-        Integer left = Integer.parseInt(ltargs.get(0).getData());
-        Integer right = Integer.parseInt(ltargs.get(1).getData());
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
 
         code.removeChildren(false);
         code.setData(""  +(left / right));
+
+        return true;
+    } else if (code.getData().equals("^")) {
+        Vector<Tree> ltargs = code.getChildren();
+        Double left = Double.parseDouble(ltargs.get(0).getData());
+        Double right = Double.parseDouble(ltargs.get(1).getData());
+
+        code.removeChildren(false);
+        code.setData(""  + Math.pow(left, right));
 
         return true;
     }
