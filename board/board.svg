@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -14,8 +13,10 @@
    height="4320"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="board.svg">
+   inkscape:version="0.46"
+   sodipodi:docname="board.svg"
+   sodipodi:version="0.32"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -820,7 +821,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.24748737"
-     inkscape:cx="1646.2156"
+     inkscape:cx="2472.101"
      inkscape:cy="2859.506"
      inkscape:document-units="in"
      inkscape:current-layer="layer1"
@@ -828,9 +829,9 @@
      units="ft"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1680"
-     inkscape:window-height="1026"
-     inkscape:window-x="1680"
+     inkscape:window-width="1024"
+     inkscape:window-height="721"
+     inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-grids="true"
@@ -1687,7 +1688,7 @@
            height="140"
            x="128.57143"
            y="571.42859" /></flowRegion><flowPara
-         id="flowPara3184"></flowPara></flowRoot>    <text
+         id="flowPara3184" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        x="456.58896"
@@ -1708,6 +1709,10 @@
        sodipodi:ry="66.641739"
        d="m 2680.2094,1248.4219 a 66.641739,66.641739 0 1 1 -133.2835,0 66.641739,66.641739 0 1 1 133.2835,0 z"
        transform="translate(154.01782,-3578.6573)" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10.17000000000000171;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.28451884;stroke-miterlimit:4;stroke-dasharray:61.02000000000000313, 10.17000000000000171;stroke-dashoffset:0"
+       d="M 2376.0423,-2119.554 C 3177.128,-2119.554 3171.7153,-2119.554 3171.7153,-2119.554"
+       id="path2741" />
     <path
        transform="translate(21.14002,-3371.4467)"
        sodipodi:type="arc"
@@ -1739,8 +1744,8 @@
        id="path11745"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:8.41750717;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-end:url(#Arrow2Mend)"
-       d="m 2979.3871,-2131.3373 c 77.6634,0 79.3159,0 79.3159,0"
+       style="fill:none;stroke:#000000;stroke-width:8.41750717;stroke-linecap:butt;stroke-linejoin:miter;marker-start:none;marker-end:url(#Arrow2Mend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 2979.3871,-2123.3373 C 3057.0505,-2123.3373 3058.703,-2123.3373 3058.703,-2123.3373"
        id="path13949-8" />
     <path
        style="fill:none;stroke:#000000;stroke-width:9.29940605;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-end:url(#Arrow2Mend)"
@@ -1844,7 +1849,7 @@
              height="402.04071"
              x="-12.121831"
              y="3473.4922" /></flowRegion><flowPara
-           id="flowPara4367"></flowPara></flowRoot>    </g>
+           id="flowPara4367" /></flowRoot>    </g>
     <flowRoot
        xml:space="preserve"
        id="flowRoot4452"
@@ -1884,5 +1889,5 @@
            height="149.50258"
            x="2650.6404"
            y="1095.5931" /></flowRegion><flowPara
-         id="flowPara4484"></flowPara></flowRoot>  </g>
+         id="flowPara4484" /></flowRoot>  </g>
 </svg>
