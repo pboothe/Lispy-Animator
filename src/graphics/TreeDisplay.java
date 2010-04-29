@@ -123,26 +123,25 @@ public class TreeDisplay extends JComponent implements TreeChangeListener {
         laidout = true;
     }
 
-    /* // HACK FOR IMAGES
     int name = 1;
     @Override
     public void paint(Graphics g)
     {
-        System.out.println("UPDATE");
+        // HACK FOR IMAGES
+        /*System.out.println("UPDATE");
         Image os = createImage(getWidth(), getHeight());
         paint2(os.getGraphics());
         g.drawImage(os,0,0,this);
 
         try {
             if (name++ % 50 == 0)
-                ImageIO.write((RenderedImage)os, "png", new File("ss" + name + ".png"));
+                ImageIO.write((RenderedImage)os, "png", new File("qf" + name + ".png"));
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-    }*/
+    }
 
-    @Override
-    public void paint(Graphics g) {
+    public void paint2(Graphics g) {*/
         Graphics2D g2 = graphicsPrep(g);
         if (message != null) {
             g.drawString(message, 0, getHeight() / 2);
