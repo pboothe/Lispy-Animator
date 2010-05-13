@@ -91,8 +91,7 @@ out with $u_x < v_x$, which will preserve in our layout the natural order of the
 
 \subsection{Prior Work}
 
-Paper from 1996 and Tamassia and FruchetermanWhatever magnets and springs
-model.
+Paper from 1996 and Tamassia and the force-directed placement algorithm\cite{fdp}.
 
 \subsection{Taking Advantage of Computational Abundance}
 
@@ -144,8 +143,10 @@ when creating a new visualization.
 \section{Our Library}
 
 Our library is written in Java, and users of the library need only use two of the classes it contains: the \java{Tree} class, and the \java{TreeDisplay} class.  
-
 \subsection{How-To}
+
+The class \java{TreeDisplay} needs to only be created once.  A \java{TreeDisplay} may be used a GUI element for any code.
+
 \subsection{A Sample Application}
 
 \section{Example Animations}
@@ -220,5 +221,8 @@ Our library is written in Java, and users of the library need only use two of th
 \section{Conclusion}
 
 We have passed a threshold of computational abundance which can allow visualization libraries to use less-efficient algorithms in pursuit of programming ease.  Noting this threshold allows us to articulate a design for a layout library that, by doing much more work behind the scenes, makes the creation and usage of visualizations available to a much larger audience.  We have created such a library and provided several sample visualizations.  We hope that any and all of our design ideas, the resulting library, and the provided visualizations, might be useful to others who are attempting to demonstrate, learn, understand, or admire the behavior of trees which evolve over time.
+
+\bibliographystyle{plain}
+\bibliography{bibliography.bib}
 
 \end{document}
