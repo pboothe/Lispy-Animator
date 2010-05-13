@@ -2,10 +2,11 @@
 
 \usepackage{url}
 \usepackage{graphicx}
+\usepackage[width=4.5in,height=7.2in]{geometry}
 
 \title{Drawing Trees and Animating Tree Changes}
 
-\author{Sandro Badame, Peter Boothe$^*$\\
+\author{Sandro Badame, Peter Boothe\footnote{Corresponding author}\\
  Manhattan College\\
 \url{{sbadame.student,peter.boothe}@manhattan.edu}}
 
@@ -28,18 +29,18 @@ aspect of this tricky task.\end{abstract}
 \section{Introduction}
 Trees, and especially trees which change over time, are fundamental objects in
 computer science.  They occur in many disparate contexts, and while the uses of
-these trees may be different, there are some commonalities which we can use to
+these trees may be different, there exist commonalities which we can use to
 build a tree visualization system which might be useful in many different
 contexts.  In this paper we articulate the design principles of a general tree visualization system, present one such system that we have built in Java and made freely available, and then demonstrate our system's utility with several sample visualizations.
 
 There are multiple reasons to visualize a system, and different reasons have
-different requirements for the visualization.  A visualization designed for
-experts may be very useful for that target group, but leave neophytes
-confused.  Therefore, before we discuss the particulars of our visualization,
-we must explain our reasons for wanting such a system in the first place, and
-the expected audience.  We want to visualize dynamic trees for demonstration,
-education, and beauty, and we would like our visualizations to be of benefit to
-computer science undergraduates.
+different requirements.  A visualization designed for experts may be very
+useful for that target group, but leave neophytes confused.  Therefore, before
+we discuss the particulars of our visualization, we must explain our reasons
+for wanting such a system in the first place, and the expected audience.  We
+want to visualize dynamic trees for demonstration, education, and beauty, and
+we would like our visualizations to be of benefit to computer science
+undergraduates.
 
 \subsection{Visualization for Demonstration}
 
@@ -47,7 +48,7 @@ We want to show them how things work.  We therefore will restrict ourselves to t
 
 \subsection{Visualization for Education}
 
-It turns out that demonstrations are often useless.  But if we force students to build their own visualizations, then they actually learn.  So We would like to enable that as well.
+It turns out that demonstrations are often useless.  But if we force students to build their own visualizations, then they actually learn.  So we would like to enable that as well.
 
 \subsection{Visualization for Beauty}
 
@@ -104,7 +105,7 @@ methods.  This is safe to do because we have restricted ourself to those graphs
 which can be drawn, in their entirety, on a computer screen, and have therefore
 restricted ourself to the (admittedly ill-defined) set of graphs which are
 ``small enough'' to still be drawn quickly using algorithms which may be of
-order $\Omega(n^2)$, as long as these algorithms are not super-polynomial.
+order $\omega(n)$, as long as these algorithms are not super-polynomial.
 
 Therefore, instead of restricting ourself to a particular subset of allowed
 tree operations, we allow arbitrary transformations of the tree, and then we
