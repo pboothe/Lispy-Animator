@@ -19,18 +19,18 @@
 \begin{abstract} Dynamic trees appear in many areas of computer science,
 including, but not limited to, Lisp code, data structures, tree automata, and
 computer algorithms.  It would be useful to be able to easily draw trees and
-animate them changing over time.  We begin by articulating a design for tree
+animate them changing over time.  We articulate a design for tree
 visualization and animation that is more general than previous methodologies.
 Our design is enabled by the observation that, for trees which are small enough
 to be displayed on a screen, computers are now fast enough to eliminate many
-worries about efficiency.  This observation allows us to make a library which
+concerns about efficiency.  This observation allows us to make a library which
 emphasizes simplicity of use over efficiency of execution.  We show how to use  our
 library using several visualizations.\end{abstract}
 
 \section{Introduction}
 Trees, and especially trees which change over time, are fundamental objects in
 computer science.  They occur in many disparate contexts, and while the uses of
-these trees may be different, there exist commonalities which we can use to
+these trees may be different, there exist commonalities which we exploit to
 build a tree visualization system which might be useful in many different
 contexts.  We will articulate the design principles of a highly usable
 tree visualization system, present one such system that we have built in Java
@@ -41,14 +41,14 @@ There are multiple reasons to visualize a system, and different reasons have
 different requirements.  A visualization designed for experts may be very
 useful for that target group, but leave neophytes confused.  Therefore, before
 we discuss the particulars of our visualization, we must explain our reasons
-for wanting such a system in the first place, and the expected audience.  We
-want to visualize dynamic trees for demonstration, education, and beauty, and
-we would like our visualizations to be of benefit to computer science
-undergraduates.
+for wanting such a system in the first place, as well as identify the expected
+audience.  We want to visualize dynamic trees for demonstration, education, and
+beauty, and we would like our system to be of benefit to computer
+science undergraduates.
 
 \subsection{Visualization for Demonstration}
 
-One reason for visualization is for demonstration.  Trees (and other systems)
+One reason for visualization is for demonstration.  Trees and other systems
 are visualized in an effort to show how these systems work.  Because this is
 one of our goals, we will restrict ourselves to trees which are small enough to
 be drawn in their entirety on a single computer screen.  Whenever we visualize a tree, our display system will show the entire tree, and it will be part of the job of our library to make the best use of the available screen real estate.
@@ -57,17 +57,17 @@ be drawn in their entirety on a single computer screen.  Whenever we visualize a
 \label{educ}
 
 Computing and math educators have a long history of building visualization
-systems for demonstration.  The intuition in many case was that if students can view these
-systems in action, then the students will understand these system.
+systems for demonstration.  The intuition was that if students could view these
+systems in action, then the students would understand these systems.
 Unfortunately for those goals, Hundhausen, Douglas, and Stasko found that, in practice, almost all
-visualizations are useless\cite{hds}.  A good visualization seems intuitively useful, but
-it turns out that if a student does not understand the system being visualized, they will not understand the visualization either.  The one bright spot in this was in interactivity and construction.  The one activity that improved student understanding was not the viewing of a visualization, but instead its construction.
+visualizations are useless\cite{hds}.  A good visualization seems intuitively helpful, but
+it turns out that if a student does not understand the system being visualized, they will not understand the visualization either.  The one bright spot in this was in interactivity and construction.  The activity that improved student understanding was not the viewing of a visualization, but instead its construction and interactive use.
 
 If students, instead of viewing a visualization, construct their own, then they
 learn.  Unfortunately, visualizations are generally desired when a system is
 sufficiently complex to be difficult to understand.  If a system is difficult
 to understand, then it is difficult to program, and, even worse, graphics
-programming is perceived as one of the trickiest programming tasks.  This means
+programming can be one of the trickiest programming tasks.  This means
 that when we ask students to build a visualization, we are asking them to take
 a system they do not understand, build it correctly, and then engage in an
 extremely delicate programming task with their (hopefully correct, but likely
@@ -76,7 +76,7 @@ buggy) system.
 For effective educational visualization, students must write their own
 visualizations.  Therefore, whenever possible, we design our system to be as
 simple, learnable, and robust as possible.  This will allow more students to
-succeed in the creation of visualizations by attempting to make the graphics
+succeed in the creation of visualizations by making the graphics
 aspect of the programming task as simple as possible.
 
 \subsection{Visualization for Beauty}
@@ -88,12 +88,12 @@ beauty of the structures they are working with and also serve as an effective
 advertisement to non-majors of the intricacy and interestingness available in
 the computer science and mathematics majors.
 
-To achieve this goal of beauty, we will pay attention to the aesthetic aspects
-of our visualization as well as maintaining correctness.  In particular, we
-should ensure that transitions are smooth and not jarring, and that our
-layouts are as aesthetically pleasing as possible.  This requirement is
-difficult to quantify, but, cetus paribus, a beautiful visualization is always
-better than an ugly one.
+This requirement is difficult to quantify, but, cetus paribus, a beautiful
+visualization is always better than an ugly one.  To achieve this goal of
+beauty, we will pay attention to the aesthetic aspects of our visualization as
+well as maintaining correctness.  In particular, we should ensure that
+transitions are smooth and not jarring, and that our layouts are as
+aesthetically pleasing as possible.  
 
 \section{Designing a Tree Visualization Framework}
 
@@ -103,7 +103,7 @@ $V$ and edge set $E \subseteq \{V \times V\}$.  A \newword{rooted tree} is a
 tree where a particular vertex $r$ is designated the as the \newword{root} of
 the tree, which allows us to define the \newword{depth} of a vertex $v$ as the
 length of the shortest path between $v$ and $r$. Every edge connects two
-vertices $(u,v)$, and we will assume, again without loss of generality, that the depth of $u$ is one
+vertices $(u,v)$, and we will assume, without loss of generality, that the depth of $u$ is one
 less than the depth of $v$.  In that case, we call $u$ the \newword{parent} of
 $v$ and $v$ the \newword{child} of $u$.  The \newword{children} of $v$ are the
 set of vertices which have $v$ as their parent.  A \newword{rooted ordered
@@ -111,13 +111,13 @@ tree} is a rooted tree with a partial-ordering on the vertex set $V$ such that
 for all vertices $\{u,v, \ldots\}$ with the same parent, either $u < v$ or $v <
 u$.  
 
-Without loss of generalization, we restrict our visualization system to rooted,
+We restrict our visualization system to rooted,
 ordered trees.  Any tree can be converted into a rooted, ordered tree by
 selecting a root and imposing a partial-ordering on the vertices.  In practice,
 however, we found that every domain we considered had a naturally occurring root
 and ordering, and that the imposition of an arbitrary root or an arbitrary
 ordering was unnecessary.  From here forward, when we say tree, we will mean a
-rooted ordered tree.
+rooted, ordered tree.
 
 \section{Constraints of Tree Layout}
 \label{sec:constraints}
@@ -127,7 +127,7 @@ coordinate $(v_x, v_y)$.  When visualizing a tree we put the root at the top
 computer science), and every vertex $\{u,v \ldots\} \subset V$ with equal depth
 should be laid out with the same $y$-coordinate $(u_y = v_y)$.  Furthermore, if
 two nodes $u$ and $v$ have the same parent and $u < v$, then we should lay them
-out with $u_x < v_x$, which will preserve in our layout the natural order of the tree.  Our last requirement is that if we have two nodes $w$ and $z$ with equal depth and children $U$ and $V$, and $w_x < z_x$, then $u_x < v_x \forall u\in U, v\in V$.  This will avoid crossing edges, which is a good thing because trees are planar graphs, and so drawing them with crossing edges is totally unnecessary.
+out with $u_x < v_x$, which will preserve in our layout the natural order of the tree.  Our last requirement is that if we have two nodes $w$ and $z$ with equal depth and children $U$ and $V$, and $w_x < z_x$, then $u_x < v_x \forall u\in U, v\in V$.  This will avoid crossed edges, which is a good thing because trees are planar graphs, and so drawing them with crossing edges is totally unnecessary.
 
 \subsection{Prior Work}
 
@@ -137,8 +137,9 @@ efficiently\cite{Moen,tamassia} as well as on the force-directed placement
 algorithm for tree layout\cite{fdp, Cohen}.  The entirety of this work has been
 largely spent on designing systems in which trees can be laid out and animated
 in an efficient manner.  Our work differs from theirs due to our focus on
-ease-of-use, and that focus comes from the fact that the speed of a ``current''
-computer has grown dramatically since the original papers were written.
+ease-of-use, and that focus comes from the fact that the speed of commonly
+available computers has grown dramatically since the original papers were
+written.
 
 \subsection{Taking Advantage of Computational Abundance}
 
@@ -185,19 +186,20 @@ layout process settling the tree into the final layout, the graph seemed more
 
 Either on every tree transformation or when requested by the visualization
 programmer, we re-layout (off-screen) the entire tree according to our layout
-algorithm and then we animate the transition from the old tree to the new
-tree.  Or animation procedure is extremely basic, but the simplicity allows for simplicity of use.
+algorithm and then we animate the transition from the old tree to the new tree.
+Or animation procedure is extremely simple, but that simplicity allows for
+simplicity of use.
 
 Our animation procedure has six steps.  First, we lay out, off-screen, the new
 tree.  Second, we zoom out (if required) so that the viewable area is the size
-of the maximum of the new tree and old tree.  Third, we fade out any of the
+of the maximum required for the new tree and old tree.  Third, we fade out any of the
 vertices and edges which were in the old tree, but have been removed in the new
 tree. Fourth, we animate the movement of all vertices which are present in both
 trees from their old positions to their new positions.  Fifth, we fade in any
 new nodes which are present only in the new tree.  Sixth, we zoom in (if
 required) so that the new tree fills the viewing area.
 
-Multiple changes can be either combined into a single animation step, or each step may be animated individually, which is the default  This choice allows artistic flexibility when creating a new visualization, but encourages visualization programmers to err on the side of more visualization rather than less.  
+Multiple changes can be either combined into a single animation step, or each step may be animated individually, which is the default.  This choice allows artistic flexibility when creating a new visualization, but encourages visualization programmers to err on the side of more visualization rather than less.  
 
 \section{Our Library}
 
