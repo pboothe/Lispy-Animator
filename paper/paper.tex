@@ -23,18 +23,18 @@ animate them changing over time.  We begin by articulating a design for tree
 visualization and animation that is more general than previous methodologies.
 Our design is enabled by the observation that, for trees which are small enough
 to be displayed on a screen, computers are now fast enough to eliminate many
-worries about efficiency.  This allows us to make a library which emphasizes
-simplicity of use over efficiency of execution.  We demonstrate our library
-using several visualizations.\end{abstract}
+worries about efficiency.  This observation allows us to make a library which
+emphasizes simplicity of use over efficiency of execution.  We show how to use  our
+library using several visualizations.\end{abstract}
 
 \section{Introduction}
 Trees, and especially trees which change over time, are fundamental objects in
 computer science.  They occur in many disparate contexts, and while the uses of
 these trees may be different, there exist commonalities which we can use to
 build a tree visualization system which might be useful in many different
-contexts.  In this paper we articulate the design principles of a highly usable
+contexts.  We will articulate the design principles of a highly usable
 tree visualization system, present one such system that we have built in Java
-and made freely available, and then demonstrate our system's utility with
+and made freely available, and then show our system's utility with
 several sample visualizations.
 
 There are multiple reasons to visualize a system, and different reasons have
@@ -56,12 +56,12 @@ be drawn in their entirety on a single computer screen.  Whenever we visualize a
 \subsection{Visualization for Education}
 \label{educ}
 
-Computing and math eductors have a long history of building visualization
-systems for demonstration, on the grounds that if students can view these
+Computing and math educators have a long history of building visualization
+systems for demonstration.  The intuition in many case was that if students can view these
 systems in action, then the students will understand these system.
 Unfortunately for those goals, Hundhausen, Douglas, and Stasko found that, in practice, almost all
 visualizations are useless\cite{hds}.  A good visualization seems intuitively useful, but
-it turns out that if a student does not understand the system being visualized, they will not understand the visualization either.  The one bright spot in this was in interactivity and construction.  The one activity that actually improved student understanding was not the viewing of a visualization, but instead its construction.
+it turns out that if a student does not understand the system being visualized, they will not understand the visualization either.  The one bright spot in this was in interactivity and construction.  The one activity that improved student understanding was not the viewing of a visualization, but instead its construction.
 
 If students, instead of viewing a visualization, construct their own, then they
 learn.  Unfortunately, visualizations are generally desired when a system is
@@ -73,24 +73,24 @@ a system they do not understand, build it correctly, and then engage in an
 extremely delicate programming task with their (hopefully correct, but likely
 buggy) system.
 
-For educational visualization to be effective, students must write their own
+For effective educational visualization, students must write their own
 visualizations.  Therefore, whenever possible, we design our system to be as
 simple, learnable, and robust as possible.  This will allow more students to
-succeed in the creation of visualizations by attemping to make the graphics
+succeed in the creation of visualizations by attempting to make the graphics
 aspect of the programming task as simple as possible.
 
 \subsection{Visualization for Beauty}
 
 Computational processes are often both sophisticated and beautiful, but their
-beauty can be lost in the nitty-gritty of simply getting a given algorithm to
+beauty can be lost in the nitty-gritty of simply making a given algorithm
 work.  Using a visualization system could, potentially, remind students of the
 beauty of the structures they are working with and also serve as an effective
 advertisement to non-majors of the intricacy and interestingness available in
 the computer science and mathematics majors.
 
-To acheive this goal of beauty, we will pay attention to the aesthetic aspects
+To achieve this goal of beauty, we will pay attention to the aesthetic aspects
 of our visualization as well as maintaining correctness.  In particular, we
-should make sure that transitions are smooth and not jarring, and that our
+should ensure that transitions are smooth and not jarring, and that our
 layouts are as aesthetically pleasing as possible.  This requirement is
 difficult to quantify, but, cetus paribus, a beautiful visualization is always
 better than an ugly one.
@@ -103,7 +103,7 @@ $V$ and edge set $E \subseteq \{V \times V\}$.  A \newword{rooted tree} is a
 tree where a particular vertex $r$ is designated the as the \newword{root} of
 the tree, which allows us to define the \newword{depth} of a vertex $v$ as the
 length of the shortest path between $v$ and $r$. Every edge connects two
-vertices $(u,v)$, and we will assume, again wlog, that the depth of $u$ is one
+vertices $(u,v)$, and we will assume, again without loss of generality, that the depth of $u$ is one
 less than the depth of $v$.  In that case, we call $u$ the \newword{parent} of
 $v$ and $v$ the \newword{child} of $u$.  The \newword{children} of $v$ are the
 set of vertices which have $v$ as their parent.  A \newword{rooted ordered
@@ -114,7 +114,7 @@ u$.
 Without loss of generalization, we restrict our visualization system to rooted,
 ordered trees.  Any tree can be converted into a rooted, ordered tree by
 selecting a root and imposing a partial-ordering on the vertices.  In practice,
-however, we found that every domain we considered had a naturally occuring root
+however, we found that every domain we considered had a naturally occurring root
 and ordering, and that the imposition of an arbitrary root or an arbitrary
 ordering was unnecessary.  From here forward, when we say tree, we will mean a
 rooted ordered tree.
@@ -169,7 +169,7 @@ constraints on how the vertices can move in response to the forces applied.
 Most importantly, we only allow vertices to left left-right, and never
 up-down.  The initial vertical position of a vertex is also its final
 position.  Similarly, a vertex may never swap rank with another vertex on the
-same level --- no matter how strong the forces involved, the initial ordering
+same level. No matter how strong the forces involved, the initial ordering
 of a row must also be the final ordering of a row.  Metaphorically, one can
 think of treating the vertices as train cars on a horizontal rail.  The cars
 can only move back and forth in one direction, and they may never move through
@@ -178,13 +178,13 @@ each other.
 In a large graph, this layout may take some time to settle down (on the order
 of seconds).  We have seen positive effects in displaying the layout process to
 the user.  In particular, multiple users have commented how, by showing the
-layout process settling the tree into the final layout, the graph seems more
-``alive''. 
+layout process settling the tree into the final layout, the graph seemed more
+``alive'' on the screen. 
 
 \subsection{Animation Algorithm}
 
 Either on every tree transformation or when requested by the visualization
-programmer, we relayout (off-screen) the entire tree according to our layout
+programmer, we re-layout (off-screen) the entire tree according to our layout
 algorithm and then we animate the transition from the old tree to the new
 tree.  Or animation procedure is extremely basic, but the simplicity allows for simplicity of use.
 
@@ -193,11 +193,11 @@ tree.  Second, we zoom out (if required) so that the viewable area is the size
 of the maximum of the new tree and old tree.  Third, we fade out any of the
 vertices and edges which were in the old tree, but have been removed in the new
 tree. Fourth, we animate the movement of all vertices which are present in both
-trees from their old positions to their new postions.  Fifth, we fade in any
+trees from their old positions to their new positions.  Fifth, we fade in any
 new nodes which are present only in the new tree.  Sixth, we zoom in (if
 required) so that the new tree fills the viewing area.
 
-Multiple changes can be either combined into a single animation step, or each step may be animated individually, which is the default  This allows artistic flexibility when creating a new visualization, but allows visualization programmers to err on the side of more visualization rather than less.  
+Multiple changes can be either combined into a single animation step, or each step may be animated individually, which is the default  This choice allows artistic flexibility when creating a new visualization, but encourages visualization programmers to err on the side of more visualization rather than less.  
 
 \section{Our Library}
 
@@ -205,7 +205,7 @@ Our library\cite{ourlibrary} is written in Java, and users of the library need o
 the classes it contains: the \java{Tree} class, and the \java{TreeDisplay}
 class.  Our primary design principle in building this system was ease of usage
 by another programmer.  Therefore, our two classes have very few methods, and
-those few methods are very simple to use.  Prior efforts focused a lot of work
+those few methods are very simple to use.  Prior efforts focused 
 on making specific animations efficient, but we have instead focused our
 efforts on ease of use. 
 
@@ -216,16 +216,16 @@ The class \java{TreeDisplay} needs to only be created once.  A
 code.  A \java{Tree} may be created at any time, and to display a tree, use the
 \java{setTree} method of the \java{TreeDisplay} class.  Each \java{Tree} has
 methods to manipulate both the data displayed at the root of that particular
-subtree, as well as to manage the children of the root note of the subtree,
-which are, naturally, trees themselves.
+subtree, as well as methods to manage the children of the subtree.
+Those children are, naturally, trees themselves.
 
-Each \java{Tree} has no ties to any algorithm.  The user must program any manipulation algorithm themselves.  If the \java{Tree} is currently being displayed, then any tree operation will be animated by default.
+Each \java{Tree} has no ties to any algorithm.  The user must program any manipulation algorithm themselves.  If the \java{Tree} is being actively displayed, then any tree operation will be animated by default.
 
 \subsection{Example: Tree Automaton}
 
 Our first example usage of the library is the animation of a tree automaton.  Tree automatons are a long-studied branch of computational theory, and our tree automaton is adapted from the first chapter of {\it Tree Automata Techniques and Applications}\cite{tata2007}.
 
-The tree automaton we visualize accepts all trees which represent logical tautologies made out of the logical operations ``and'', ``or'', and ``not'', and the literals 0 and 1.  Our rewrite rules for the tree are shown in Figure~\ref{fig:rules}, and the set of accepted trees is a tree with a single vertex named ``true''.
+The tree automaton we visualize accepts all trees which represent logical tautologies made out of the logical operations ``and'', ``or'', and ``not'', and the literals 0 and 1.  Our rewrite rules for the tree may be found in Figure~\ref{fig:rules}, and the set of accepted trees is a tree with a single vertex named ``true'' and no edges.
 
 \begin{figure}
   \begin{tabular}{c c c}
@@ -240,7 +240,7 @@ The tree automaton we visualize accepts all trees which represent logical tautol
 
 The progressive execution of the tree automaton consists of recognizing some
 subtree which conforms to the left hand side of a rule and then replacing that
-subtree with the right side of the rule.  Our visualization library alowed us
+subtree with the right side of the rule.  Our visualization library allowed us
 to implement a tree automation and its attendant visualization using
 approximately 200 lines of Java code.  The size is mentioned because a project of that size is small enough to be appropriate for a class assignment, which is a positive sign that we are meeting the requirements of Section~\ref{educ}.
 
@@ -249,7 +249,7 @@ Our visualization of this automaton analyzing the logical expression \\
 ($\lnot$ (($\lnot$ ((1 $\lor$ 1) $\lor$ ($\lnot$ 1))) $\land$ ((($\lnot$ 1) $\land$ (0 $\land$ 0)) $\lor$ ((1 $\lor$ 1) $\lor$ (1 $\lor$ 0))))) \\
 $\land$ ($\lnot$ (((($\lnot$ 1) $\lor$ (0 $\land$ 1)) $\land$ ((0 $\lor$ 0) $\land$ (1 $\lor$ 1))) $\land$ (((1 $\land$ 0) $\lor$ (0 $\land$ 1)) $\lor$ ((1 $\land$ 1) $\lor$ (0 $\lor$ 0)))))\\
 ~\\
-may be seen in flipbook form in Figure~\ref{fig:auto}.  Interesting things of note include a few frames of the animation where a vertex is in the process of ``fading out'', as well as the successive zooming as the tree gets smaller and smaller.  Note that our final frame indicates that the tree automaton has accepted the input, and that therefore the logical expression was a tautology.
+may be seen in flipbook form in Figure~\ref{fig:auto}.  Interesting things of note include a few frames of the animation where a vertex is in the process of ``fading out'', as well as the successive zooming as the tree gets smaller and smaller.  The final frame of the flipbook indicates that the tree automaton has accepted the input, and that therefore the logical expression was a tautology.
 
 \begin{figure}
 \begin{center}
@@ -307,12 +307,11 @@ We also created a visualization of a lisp machine executing a very basic program
 \label{lispprog}
 \end{figure}
 
-There exist multiple virtual machines which model the execution of lisp code in equivalent manners, here we used one based on string substitution.  The interested reader is referred to {\it Abstract computing Machines} by Kluge\cite{acm}.  This particular visualization took more code than the tree automaton, but it includes the implementation of a turing-complete lisp compiler and virtual machine, and so may be forgiven for the extra length.  The total length of all the code required was one the order of 450 lines of Java, and so is suitable for a long project or a perhaps a group project in a programming languages course.
+There exist multiple virtual machines which model the execution of lisp code in equivalent manners, here we used one based on string substitution.  The interested reader is referred to {\it Abstract computing Machines} by Kluge\cite{acm}.  This particular visualization took more code than the tree automaton, but it includes the implementation of a Turing-complete lisp compiler and virtual machine, and so may be forgiven for the extra length.  The total length of all the code required was one the order of 450 lines of Java, and so is suitable for a long project or a perhaps a group project in a programming languages course.
 
 The results of our visualization may be found in the animation flipbook shown
 in Figure~\ref{lispanim}. In the flipbook, one can see many examples of
-vertices caught in the middle of an animation.  There are multiple examples of
-vertices fading out or caught in the middle of moving around the screen.
+vertices caught in the middle of an animation, either fading out or in the process of moving about the screen.  
 
 \begin{figure}
 \begin{center}
@@ -339,11 +338,21 @@ vertices fading out or caught in the middle of moving around the screen.
 \label{lispanim}
 \end{figure}
 
-As well as the execution of the evaluation of the quadratic formula, we have also produced visualizations of lisp code calculating the factorial function and the Fibonacci sequence.  These examples, while interesting, are mostly interesting as examples of the $\lambda$-calculus and teaching aids in a programming languages course.  The animation proceeds much like the the flipbook shown, but the trees involved are much larger and more inctricate.
+As well as the execution of the evaluation of the quadratic formula, we have
+also produced visualizations of lisp code calculating the factorial function
+and the Fibonacci sequence.  These examples, while interesting, are mostly
+interesting as examples of the $\lambda$-calculus and teaching aids in a
+programming languages course.  The animation proceeds much like the flipbook
+shown, but the trees involved are much larger and more intricate.
 
-\subsection{Other example visualizations}
+\subsection{Other Example Visualizations}
 
-Also included with our library are visualizations of self-adjusting binary search trees (AVL Trees) and of the growth of a random tree.  The random tree is particularly interesting, because it was requested by an audience member during a presentation and was then implemented in the next 30 minutes.  It is hoped that this short distance from request to implementation can serve as an example of the power of both our library and especially our design approach.
+Also included with our library are visualizations of self-adjusting binary
+search trees (AVL Trees) and of the growth of a random tree.  The random tree
+is particularly interesting, because it was requested by an audience member
+during a presentation and was then implemented in the next half hour.  We hope
+that this short distance from request to implementation can serve as an example
+of the power of both our library and especially our design approach.
 
 \section{Conclusion}
 
