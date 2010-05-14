@@ -18,13 +18,12 @@
 
 \begin{abstract}
 Dynamic trees appear in many areas of computer science, including, but not
-limited to, Lisp code, data structures, tree automata, and computer
-algorithms.  It would be useful to be able to easily draw trees and animate
-them changing over time.  We begin by articulating a design for tree
-visualization and animation that is more general than previous methodologies.
-We demonstrate, using several visualizations, the
-usage of a library we have created which attempts to simplify the graphics
-aspect of this tricky task.\end{abstract}
+limited to, Lisp code, data structures, tree automata, and computer algorithms.
+It would be useful to be able to easily draw trees and animate them changing
+over time.  We begin by articulating a design for tree visualization and
+animation that is more general than previous methodologies.  We demonstrate,
+using several visualizations, the usage of a library we have created which
+attempts to simplify the graphics aspect of this tricky task.\end{abstract}
 
 \section{Introduction}
 Trees, and especially trees which change over time, are fundamental objects in
@@ -124,7 +123,10 @@ by a small amount.
 
 \subsection{Animation Algorithm}
 
-Either on every tree transformation, or when requested by the visualization programmer, we relayout the entire tree according to our layout algorithm, and then we animate the transition from the older, currently-laid-out tree, to the new tree.  Or animation proceeds in the following steps:
+Either on every tree transformation, or when requested by the visualization
+programmer, we relayout the entire tree according to our layout algorithm, and
+then we animate the transition from the older, currently-laid-out tree, to the
+new tree.  Or animation proceeds in the following steps:
 
 1) Layout the new tree using the method above. 
 Do this layout off screen. 
@@ -143,10 +145,20 @@ when creating a new visualization.
 
 \section{Our Library}
 
-Our library is written in Java, and users of the library need only use two of the classes it contains: the \java{Tree} class, and the \java{TreeDisplay} class.  
+Our library is written in Java, and users of the library need only use two of
+the classes it contains: the \java{Tree} class, and the \java{TreeDisplay}
+class.  Our primary design principle in building this system was ease of usage
+by another programmer.  Therefore, our two classes have very few methods, and
+those few methods are very simple to use.  Prior efforts focused a lot of work
+on making specific animations efficient, but we have instead focused our
+efforts on ease of use. 
+
 \subsection{How-To}
 
-The class \java{TreeDisplay} needs to only be created once.  A \java{TreeDisplay} may be used a GUI element for any code.
+The class \java{TreeDisplay} needs to only be created once.  A
+\java{TreeDisplay} is an AWT component, and may be used as such in any Java
+code.  A \java{Tree} may be created at any time, and to display a tree, use the
+\java{setTree} method of the \java{TreeDisplay} class.
 
 \subsection{A Sample Application}
 
@@ -221,7 +233,16 @@ The class \java{TreeDisplay} needs to only be created once.  A \java{TreeDisplay
 
 \section{Conclusion}
 
-We have passed a threshold of computational abundance which can allow visualization libraries to use less-efficient algorithms in pursuit of programming ease.  Noting this threshold allows us to articulate a design for a layout library that, by doing much more work behind the scenes, makes the creation and usage of visualizations available to a much larger audience.  We have created such a library and provided several sample visualizations.  We hope that any and all of our design ideas, the resulting library, and the provided visualizations, might be useful to others who are attempting to demonstrate, learn, understand, or admire the behavior of trees which evolve over time.
+We have passed a threshold of computational abundance which can allow
+visualization libraries to use less-efficient algorithms in pursuit of
+programming ease.  Noting this threshold allows us to articulate a design for a
+layout library that, by doing much more work behind the scenes, makes the
+creation and usage of visualizations available to a much larger audience.  We
+have created such a library and provided several sample visualizations.  We
+hope that any and all of our design ideas, the resulting library, and the
+provided visualizations, might be useful to others who are attempting to
+demonstrate, learn, understand, or admire the behavior of trees which evolve
+over time.
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
